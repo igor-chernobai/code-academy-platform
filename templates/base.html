@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Платформа курсів</title>
+  <link rel="stylesheet" href="{% static 'src/output.css' %}">
+  <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+  {% block css %}
+
+  {% endblock %}
+</head>
+<body>
+<header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-[#010114]">{{ course.title }}</h1>
+    <div class="text-right">
+      <span class="text-xs text-gray-500 uppercase tracking-wider">Урок</span>
+      <p class="font-medium text-[#010114]">{{ lesson.title }}</p>
+    </div>
+  </div>
+</header>
+<main class="">
+  {% block content %}
+
+  {% endblock %}
+</main>
+<!-- Alpine.js для управления состоянием -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>
