@@ -24,8 +24,8 @@ def lesson_complete(request, slug):
     lesson = get_object_or_404(Lesson, slug=slug)
     if request.method == "POST":
         LessonProgress.objects.create(student=request.user,
-                       lesson=lesson,
-                       is_complete=True)
+                                      lesson=lesson,
+                                      is_complete=True)
 
         next_lesson = lesson.get_next
         if next_lesson:
