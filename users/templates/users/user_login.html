@@ -7,6 +7,7 @@
       <form action="{% url 'users:login' %}" method="post" class="space-y-4">
         {% csrf_token %}
 
+        <input type="hidden" name="next" value="{{ next }}">
         {% for field in form %}
           <div>
             <label for="{{ field.id_for_label }}"

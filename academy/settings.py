@@ -163,3 +163,7 @@ MDEDITOR_CONFIGS = {
         'language': 'en'  # zh / en / es
     }
 }
+
+# Auth
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

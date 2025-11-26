@@ -1,7 +1,8 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 
-class UserLoginForm(forms.Form):
+class UserLoginForm(AuthenticationForm):
     username = forms.CharField(label="Ім'я студента",
                                widget=forms.TextInput(attrs={
                                    "class": "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"}))
