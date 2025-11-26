@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'mdeditor/', include('mdeditor.urls')),
     path("courses/", include("courses.urls")),
+    path("users/", include("users.urls")),
     path("", courses_page, name="courses")
 ]
