@@ -3,11 +3,10 @@
 {% block content %}
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-xl">
-      <h2 class="text-2xl font-bold text-center text-gray-800">Увійти</h2>
-      <form action="{% url 'users:login' %}" method="post" class="space-y-4">
+      <h2 class="text-2xl font-bold text-center text-gray-800">Реєстрація</h2>
+      <form action="{% url 'users:register' %}" method="post" class="space-y-4">
         {% csrf_token %}
 
-        <input type="hidden" name="next" value="{{ next }}">
         {% for field in form %}
           <div>
             <label for="{{ field.id_for_label }}"
@@ -20,13 +19,14 @@
         {% endfor %}
 
         <button type="submit"
-                class="w-full py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
-          Увійти
+                class="w-full py-2 font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1">
+          Зареєструватися
         </button>
 
+        <!-- Ссылка на вход -->
         <p class="mt-4 text-sm text-center text-gray-600">
-          Ще немає акаунта?
-          <a href="{% url 'users:register' %}" class="text-blue-600 hover:underline">Зареєструватися</a>
+          Вже є акаунт? 
+          <a href="{% url 'users:login' %}" class="text-blue-600 hover:underline">Увійти</a>
         </p>
       </form>
     </div>
