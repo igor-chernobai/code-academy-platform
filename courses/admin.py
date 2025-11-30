@@ -8,6 +8,7 @@ from courses.models import Course, Module, Lesson, LessonProgress
 @admin.register(Course)
 class CourseAdmin(ModelAdmin):
     list_display = ["title", "owner", "created"]
+    prepopulated_fields = {"slug": ["title"]}
     compressed_fields = True
 
 

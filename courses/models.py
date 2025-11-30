@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from markdown import markdown
 from mdeditor.fields import MDTextField
@@ -9,13 +10,18 @@ class Course(models.Model):
     title = models.CharField("Назва курса", max_length=155)
     slug = models.SlugField("Слаг", max_length=155)
     created = models.DateTimeField("Дата створення курсу", auto_now_add=True)
-    content = models.TextField("Контент сторінки")
+    image = models.ImageField(upload_to="course_image/", blank=True, null=True)
+    short_description = models.TextField("Коротко про курсе")
+    about = models.TextField("Про курсе")
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="Власник")
 
     class Meta:
         db_table = "course"
         verbose_name = "Курс"
         verbose_name_plural = "Курси"
+
+    def get_absolute_url(self):
+        return reverse("courses:course_detail", args=[self.slug])
 
     def __str__(self):
         return self.title

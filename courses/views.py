@@ -1,15 +1,18 @@
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 
 from courses.models import Course, Lesson, LessonProgress
 
 
 def courses_page(request):
-    courses = Course.objects.all()
+    courses = Course.objects.annotate(count_modules=Count("modules"),
+                                      count_lessons=Count("modules__lessons")
+                                      )
     return render(request, "courses/courses.html", {"courses": courses})
 
 
-def course_detail(request):
-    course = Course.objects.get(owner=request.user)
+def course_detail(request, slug):
+    course = get_object_or_404(Course, slug=slug)
     context = {"course": course}
     return render(request, "courses/detail.html", context)
 

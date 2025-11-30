@@ -3,24 +3,22 @@
 
 {% block content %}
 
-<div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] min-h-screen pt-20">
-
-  <!-- ФИКСИРОВАННЫЙ САЙДБАР (через grid + sticky) -->
-  <aside class="hidden lg:block bg-white border-r border-gray-200">
-    <div class="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto py-10 px-8">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[280px_1fr] min-h-screen pt-17">
+  <aside class="hidden lg:block  border-r border-gray-200">
+    <div class="sticky top-17 h-[calc(100vh-5rem)] overflow-y-auto py-10 sm:px-4 pr-8">
       {% for module in course.modules.all %}
-        <div class="mb-12">
+        <div class="mb-4">
           <h3 class="text-xs font-semibold text-[#539db8] uppercase tracking-wider mb-3">
             {{ module.title }}
           </h3>
 
           {% for l in module.lessons.all %}
             <a href="{% url 'courses:lesson' l.slug %}"
-               class="block px-5 py-3 rounded-xl text-sm font-medium transition-all duration-200 mb-1
+               class="block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 mb-1
                       {% if l == lesson %}
                         bg-[#ff9d32] text-white font-semibold shadow-sm
                       {% else %}
-                        text-gray-700 hover:bg-gray-100
+                        text-gray-700 hover:bg-gray-200
                       {% endif %}">
               {{ l.title }}
             </a>
@@ -30,8 +28,7 @@
     </div>
   </aside>
 
-  <!-- ГЛАВНЫЙ КОНТЕНТ -->
-  <main class="px-6 py-12 lg:py-20 max-w-5xl mx-auto w-full">
+  <main class="px-6 py-12 lg:px-20 lg:py-10 max-w-5xl mx-auto w-full">
     <h1 class="text-4xl lg:text-5xl font-bold text-[#010114] mb-6 leading-tight">
       {{ lesson.title }}
     </h1>

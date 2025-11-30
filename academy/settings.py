@@ -144,7 +144,7 @@ MDEDITOR_CONFIGS = {
                     "list-ul", "list-ol", "hr", "|",
                     "link", "reference-link", "image", "code", "code-block", "table",
                     "emoji", "|",
-                    "||", "preview", "watch", "fullscreen"],  # custom edit box toolbar
+                    "||", "preview", "watch", "fullscreen", "help",],  # custom edit box toolbar
         'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # image upload format type
         'upload_require_auth': False,  # image upload authentication requirement
         'image_folder': 'editor',  # image save the folder name
