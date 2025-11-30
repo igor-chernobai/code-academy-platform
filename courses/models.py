@@ -29,7 +29,7 @@ class Course(models.Model):
 
 
 class Module(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, related_name="modules")
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, related_name="modules", verbose_name="Курс")
     title = models.CharField("Назва модулю", max_length=155)
     slug = models.SlugField("Слаг", max_length=155)
     created = models.DateTimeField("Дата створення модулю", auto_now_add=True)
@@ -47,7 +47,7 @@ class Module(models.Model):
 
 
 class Lesson(models.Model):
-    module = models.ForeignKey(Module, on_delete=models.SET_NULL, null=True, related_name="lessons")
+    module = models.ForeignKey(Module, on_delete=models.SET_NULL, null=True, related_name="lessons", verbose_name="Модуль")
     title = models.CharField("Назва теми", max_length=155)
     slug = models.SlugField("Слаг", max_length=155)
     content = MDTextField()
