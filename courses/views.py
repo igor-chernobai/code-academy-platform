@@ -1,7 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 
 from courses.models import Course, Lesson, LessonProgress
+from courses.services.student_course_enroll import is_student_enrolled
+from users.forms import CourseEnrollForm
 
 
 def courses_page(request):
@@ -13,13 +16,22 @@ def courses_page(request):
 
 def course_detail(request, slug):
     course = get_object_or_404(Course, slug=slug)
-    context = {"course": course}
+
+    enroll_form = CourseEnrollForm(initial={"course": course})
+    context = {"course": course, "enroll_form": enroll_form,
+               "is_student_enrolled": is_student_enrolled(course, request.user)}
     return render(request, "courses/detail.html", context)
 
 
+@login_required
 def lesson_detail(request, slug):
     lesson = get_object_or_404(Lesson, slug=slug)
-    context = {"course": lesson.module.course, "lesson": lesson}
+    course = lesson.module.course
+
+    if not is_student_enrolled(course, request.user):
+        return redirect("courses:course_detail", slug=course.slug)
+
+    context = {"course": course, "lesson": lesson}
     return render(request, "courses/lesson.html", context)
 
 

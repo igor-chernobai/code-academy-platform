@@ -33,11 +33,29 @@
     </section>
 
     <section class="text-center mb-12">
-      <a href="#enroll"
-         class="inline-block px-8 py-4 bg-[#539db8] text-white font-semibold rounded-lg hover:bg-[#ff9d32] transition text-lg">
-        Записатися на курс
-      </a>
+      {% if request.user.is_authenticated %}
+        {% if is_student_enrolled %}
+        	<a href="#"
+           class="inline-block px-8 py-4 bg-[#539db8] text-white font-semibold rounded-lg hover:bg-[#ff9d32] focus:outline-none focus:ring-4 focus:ring-[#A1C2BD]/50 shadow-md transition-colors duration-200 text-lg">
+            Продовжити навчання
+          </a>
+        {% else %}
+          <form action="{% url 'users:student_enroll_course' %}" method="post" class="inline-block">
+            {% csrf_token %}
+            {{ enroll_form }}
+            <input type="submit" value="Записатися на курс"
+                   class="px-8 py-4 bg-[#539db8] text-white font-semibold rounded-lg hover:bg-[#ff9d32] focus:outline-none focus:ring-4 focus:ring-[#A1C2BD]/50 shadow-md transition-colors duration-200 cursor-pointer text-lg">
+          </form>
+        {% endif %}
+
+      {% else %}
+        <a href="{% url 'users:login' %}"
+           class="inline-block px-8 py-4 bg-[#539db8] text-white font-semibold rounded-lg hover:bg-[#ff9d32] focus:outline-none focus:ring-4 focus:ring-[#A1C2BD]/50 shadow-md transition-colors duration-200 text-lg">
+          Register to enroll
+        </a>
+      {% endif %}
     </section>
+
 
   </main>
 {% endblock %}

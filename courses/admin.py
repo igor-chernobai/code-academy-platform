@@ -10,7 +10,7 @@ class CourseAdmin(ModelAdmin):
     list_display = ["title", "owner", "created"]
     prepopulated_fields = {"slug": ["title"]}
     compressed_fields = True
-
+    filter_horizontal = ["students"]
 
 @admin.register(Module)
 class ModuleAdmin(ModelAdmin):

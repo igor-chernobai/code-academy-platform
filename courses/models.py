@@ -14,6 +14,7 @@ class Course(models.Model):
     short_description = models.TextField("Коротко про курсе")
     about = models.TextField("Про курсе")
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="Власник")
+    students = models.ManyToManyField(User, related_name="courses_joined", blank=True)
 
     class Meta:
         db_table = "course"

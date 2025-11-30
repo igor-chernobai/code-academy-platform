@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.management import get_default_username
 
+from courses.models import Course
+
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(label="Ім'я студента",
@@ -29,3 +31,10 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = get_user_model()
         fields = ["username", "first_name", "password1", "password2"]
+
+
+class CourseEnrollForm(forms.Form):
+    course = forms.ModelChoiceField(
+        queryset=Course.objects.all(),
+        widget=forms.HiddenInput
+    )
