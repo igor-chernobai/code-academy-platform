@@ -15,7 +15,7 @@ def courses_page(request):
 
 
 def course_detail(request, slug):
-    course = get_object_or_404(Course, slug=slug)
+    course = get_object_or_404(Course.objects.prefetch_related("modules"), slug=slug)
 
     enroll_form = CourseEnrollForm(initial={"course": course})
     context = {"course": course, "enroll_form": enroll_form,
@@ -25,10 +25,11 @@ def course_detail(request, slug):
 
 @login_required
 def lesson_detail(request, slug):
-    lesson = get_object_or_404(Lesson, slug=slug)
+    lesson = get_object_or_404(Lesson.objects.select_related("module__course"), slug=slug)
     course = lesson.module.course
+    course = Course.objects.prefetch_related("modules__lessons").get(id=course.id)
 
-    if not is_student_enrolled(course, request.user):
+    if  not is_student_enrolled(course, request.user):
         return redirect("courses:course_detail", slug=course.slug)
 
     context = {"course": course, "lesson": lesson}
