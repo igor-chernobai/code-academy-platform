@@ -29,7 +29,10 @@ class Course(models.Model):
 
 
 class Module(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, related_name="modules", verbose_name="курс")
+    course = models.ForeignKey(Course,
+                               on_delete=models.CASCADE,
+                               related_name="modules",
+                               verbose_name="курс")
     title = models.CharField("назва модулю", max_length=155)
     slug = models.SlugField("слаг", max_length=155)
     created = models.DateTimeField("дата створення модулю", auto_now_add=True)
@@ -47,12 +50,15 @@ class Module(models.Model):
 
 
 class Lesson(models.Model):
-    module = models.ForeignKey(Module, on_delete=models.SET_NULL, null=True, related_name="lessons", verbose_name="модуль")
+    module = models.ForeignKey(Module,
+                               on_delete=models.CASCADE,
+                               related_name="lessons",
+                               verbose_name="модуль")
     title = models.CharField("назва теми", max_length=155)
     slug = models.SlugField("слаг", max_length=155)
     content = MDTextField()
     created = models.DateTimeField("дата створення теми", auto_now_add=True)
-    order = models.PositiveIntegerField("порядок", null=True)
+    order = models.PositiveIntegerField("порядок")
 
     class Meta:
         db_table = "lesson"
@@ -86,7 +92,6 @@ class LessonProgress(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="лекція")
     is_complete = models.BooleanField("завершено?")
     complete_at = models.DateTimeField("дата завершення лекції", auto_now_add=True)
-
 
     class Meta:
         db_table = "lesson_progress"

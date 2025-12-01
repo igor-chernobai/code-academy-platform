@@ -1,18 +1,18 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.db.models import Count
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView
 
-from courses.models import Lesson, Course, LessonProgress
-from .services.student_course_enroll import is_student_enrolled
-from users.forms import UserLoginForm, UserRegisterForm, CourseEnrollForm
-from django.contrib.auth.views import LoginView
-
+from courses.models import Course, Lesson, LessonProgress
+from users.forms import CourseEnrollForm, UserLoginForm, UserRegisterForm
 from users.models import StudentLastActivity
 from users.services.user_lessons import get_last_student_lesson
+
+from .services.student_course_enroll import is_student_enrolled
 
 
 class UserLoginView(LoginView):

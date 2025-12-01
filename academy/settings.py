@@ -64,8 +64,7 @@ ROOT_URLCONF = 'academy.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,7 +140,7 @@ STATICFILES_DIRS = ['static/']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#MD Editor
+# MD Editor
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 MDEDITOR_CONFIGS = {
@@ -154,7 +153,7 @@ MDEDITOR_CONFIGS = {
                     "list-ul", "list-ol", "hr", "|",
                     "link", "reference-link", "image", "code", "code-block", "table",
                     "emoji", "|",
-                    "||", "preview", "watch", "fullscreen", "help",],  # custom edit box toolbar
+                    "||", "preview", "watch", "fullscreen", "help", ],  # custom edit box toolbar
         'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # image upload format type
         'upload_require_auth': False,  # image upload authentication requirement
         'image_folder': 'editor',  # image save the folder name
@@ -186,10 +185,10 @@ UNFOLD = {
     "SITE_SUBHEADER": "Appears under SITE_HEADER",
     "SITE_URL": "/",
     "SITE_SYMBOL": "speed",  # symbol from icon set
-    "SHOW_HISTORY": True, # show/hide "History" button, default: True
-    "SHOW_VIEW_ON_SITE": True, # show/hide "View on site" button, default: True
-    "SHOW_BACK_BUTTON": False, # show/hide "Back" button on changeform in header, default: False
-    "THEME": "light", # Force theme: "dark" or "light". Will disable theme switcher
+    "SHOW_HISTORY": True,  # show/hide "History" button, default: True
+    "SHOW_VIEW_ON_SITE": True,  # show/hide "View on site" button, default: True
+    "SHOW_BACK_BUTTON": False,  # show/hide "Back" button on changeform in header, default: False
+    "THEME": "light",  # Force theme: "dark" or "light". Will disable theme switcher
     "BORDER_RADIUS": "10px",
     "COLORS": {
         "base": {
@@ -233,4 +232,3 @@ UNFOLD = {
         "show_all_applications": False,  # Dropdown with all applications and models
     },
 }
-

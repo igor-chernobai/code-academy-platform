@@ -14,5 +14,4 @@ urlpatterns = [
     path("course/<int:course_id>/", views.student_course_lesson, name="student_course"),
     path("course/<int:course_id>/<slug:lesson_slug>/", views.student_course_lesson, name="student_course_lesson"),
     path("lesson/<slug:slug>/complete/", views.lesson_complete, name="lesson_complete")
-
 ]

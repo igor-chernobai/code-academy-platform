@@ -1,9 +1,9 @@
 from django.db.models import Count
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 from courses.models import Course
-from users.services.student_course_enroll import is_student_enrolled
 from users.forms import CourseEnrollForm
+from users.services.student_course_enroll import is_student_enrolled
 
 
 def course_list(request):

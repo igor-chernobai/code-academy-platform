@@ -1,8 +1,7 @@
 from django.contrib import admin
-
 from unfold.admin import ModelAdmin, StackedInline
 
-from courses.models import Course, Module, Lesson, LessonProgress
+from courses.models import Course, Lesson, LessonProgress, Module
 
 
 class ModuleInline(StackedInline):
