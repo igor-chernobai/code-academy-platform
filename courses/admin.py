@@ -38,6 +38,7 @@ class LessonAdmin(ModelAdmin):
     prepopulated_fields = {'slug': ["title"]}
     search_fields = ["title"]
     list_filter = ["module"]
+    warn_unsaved_form = True
 
 
 @admin.register(LessonProgress)

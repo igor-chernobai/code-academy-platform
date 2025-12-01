@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from courses.models import Course, Lesson, LessonProgress
 from courses.services.student_course_enroll import is_student_enrolled
 from users.forms import CourseEnrollForm
+from users.models import StudentLastActivity
 
 
 def courses_page(request):
@@ -26,11 +27,15 @@ def course_detail(request, slug):
 @login_required
 def lesson_detail(request, slug):
     lesson = get_object_or_404(Lesson.objects.select_related("module__course"), slug=slug)
-    course = lesson.module.course
-    course = Course.objects.prefetch_related("modules__lessons").get(id=course.id)
+    course_id = lesson.module.course_id
+    course = Course.objects.prefetch_related("modules__lessons").get(id=course_id)
 
-    if  not is_student_enrolled(course, request.user):
+    if not is_student_enrolled(course, request.user):
         return redirect("courses:course_detail", slug=course.slug)
+
+    StudentLastActivity.objects.update_or_create(student=request.user,
+                                                 course=course,
+                                                 defaults={"last_lesson": lesson})
 
     context = {"course": course, "lesson": lesson}
     return render(request, "courses/lesson.html", context)

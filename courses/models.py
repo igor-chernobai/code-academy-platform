@@ -7,19 +7,19 @@ from mdeditor.fields import MDTextField
 
 
 class Course(models.Model):
-    title = models.CharField("Назва курса", max_length=155)
-    slug = models.SlugField("Слаг", max_length=155)
-    created = models.DateTimeField("Дата створення курсу", auto_now_add=True)
-    image = models.ImageField(upload_to="course_image/", blank=True, null=True)
-    short_description = models.TextField("Коротко про курсе")
-    about = models.TextField("Про курсе")
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="Власник")
+    title = models.CharField("назва курса", max_length=155)
+    slug = models.SlugField("слаг", max_length=155)
+    created = models.DateTimeField("дата створення курсу", auto_now_add=True)
+    image = models.ImageField("зображення", upload_to="course_image/", blank=True, null=True)
+    short_description = models.TextField("коротко про курс")
+    about = models.TextField("про курс")
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="власник")
     students = models.ManyToManyField(User, related_name="courses_joined", blank=True)
 
     class Meta:
         db_table = "course"
-        verbose_name = "Курс"
-        verbose_name_plural = "Курси"
+        verbose_name = "курс"
+        verbose_name_plural = "курси"
 
     def get_absolute_url(self):
         return reverse("courses:course_detail", args=[self.slug])
@@ -29,17 +29,17 @@ class Course(models.Model):
 
 
 class Module(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, related_name="modules", verbose_name="Курс")
-    title = models.CharField("Назва модулю", max_length=155)
-    slug = models.SlugField("Слаг", max_length=155)
-    created = models.DateTimeField("Дата створення модулю", auto_now_add=True)
-    note = models.TextField("Опис модулю")
-    order = models.PositiveIntegerField("Порядок", null=True)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, related_name="modules", verbose_name="курс")
+    title = models.CharField("назва модулю", max_length=155)
+    slug = models.SlugField("слаг", max_length=155)
+    created = models.DateTimeField("дата створення модулю", auto_now_add=True)
+    note = models.TextField("опис модулю")
+    order = models.PositiveIntegerField("порядок", null=True)
 
     class Meta:
         db_table = "module"
-        verbose_name = "Модуль"
-        verbose_name_plural = "Модулі"
+        verbose_name = "модуль"
+        verbose_name_plural = "модулі"
         ordering = ["order"]
 
     def __str__(self):
@@ -47,17 +47,17 @@ class Module(models.Model):
 
 
 class Lesson(models.Model):
-    module = models.ForeignKey(Module, on_delete=models.SET_NULL, null=True, related_name="lessons", verbose_name="Модуль")
-    title = models.CharField("Назва теми", max_length=155)
-    slug = models.SlugField("Слаг", max_length=155)
+    module = models.ForeignKey(Module, on_delete=models.SET_NULL, null=True, related_name="lessons", verbose_name="модуль")
+    title = models.CharField("назва теми", max_length=155)
+    slug = models.SlugField("слаг", max_length=155)
     content = MDTextField()
-    created = models.DateTimeField("Дата створення теми", auto_now_add=True)
-    order = models.PositiveIntegerField("Порядок", null=True)
+    created = models.DateTimeField("дата створення теми", auto_now_add=True)
+    order = models.PositiveIntegerField("порядок", null=True)
 
     class Meta:
         db_table = "lesson"
-        verbose_name = "Лекція"
-        verbose_name_plural = "Лекції"
+        verbose_name = "лекція"
+        verbose_name_plural = "лекції"
         ordering = ["order"]
 
     @property
@@ -82,15 +82,16 @@ class Lesson(models.Model):
 
 
 class LessonProgress(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Користувач")
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="Лекція")
-    is_complete = models.BooleanField("Завершено?")
-    complete_at = models.DateTimeField("Дата завершення лекції", auto_now_add=True)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="користувач")
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="лекція")
+    is_complete = models.BooleanField("завершено?")
+    complete_at = models.DateTimeField("дата завершення лекції", auto_now_add=True)
+
 
     class Meta:
         db_table = "lesson_progress"
-        verbose_name = "Прогрес лекції"
-        verbose_name_plural = "Прогрес лекцій"
+        verbose_name = "прогрес лекції"
+        verbose_name_plural = "прогрес лекцій"
 
     def __str__(self):
         status = "Завершено" if self.is_complete else "Не завершено"

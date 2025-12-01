@@ -35,5 +35,5 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        first_lesson = Lesson.objects.filter(module__course=self.course).first()
+        first_lesson = Lesson.objects.select_related("module__course").filter(module__course=self.course).first()
         return reverse_lazy("courses:lesson", args=[first_lesson.slug])
