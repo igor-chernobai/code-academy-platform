@@ -19,19 +19,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from courses.views import courses_page
+from courses.views import course_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'mdeditor/', include('mdeditor.urls')),
     path("courses/", include("courses.urls")),
     path("users/", include("users.urls")),
-    path("", courses_page, name="courses")
+    path("", course_list, name="course_list")
 ]
 
-# if settings.DEBUG:
 
 if settings.DEBUG:
     urlpatterns += debug_toolbar_urls()
-    # urlpatterns.append(/
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
