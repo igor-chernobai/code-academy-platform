@@ -20,14 +20,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from courses.views import course_list
+from courses.views import CourseListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'mdeditor/', include('mdeditor.urls')),
     path("courses/", include("courses.urls")),
     path("users/", include("users.urls")),
-    path("", course_list, name="course_list")
+    path("", CourseListView.as_view(), name="course_list")
 ]
 
 

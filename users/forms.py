@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from courses.models import Course
+from django.core.exceptions import ValidationError
+
+from courses.models import Course, Lesson
 
 
 class UserLoginForm(AuthenticationForm):
@@ -37,3 +39,30 @@ class CourseEnrollForm(forms.Form):
         queryset=Course.objects.all(),
         widget=forms.HiddenInput
     )
+
+
+class LessonCompleteForm(forms.Form):
+    lesson = forms.ModelChoiceField(
+        queryset=Lesson.objects.select_related("module__course").all(),
+        widget=forms.HiddenInput
+    )
+    course = forms.ModelChoiceField(
+        queryset=Course.objects.all(),
+        widget=forms.HiddenInput
+    )
+
+    def clean(self):
+        cd = super().clean()
+        lesson = cd.get("lesson")
+        course = cd.get("course")
+
+        if lesson.module.course != course:
+            raise ValidationError("Лекція не відноситься до курсу")
+
+    #
+    # def save(self):
+    #     lesson = self.cleaned_data["lesson"]
+    #     LessonProgress.objects.get_or_create(student=self.student,
+    #                                          lesson=lesson,
+    #                                          defaults={"is_complete": True})
+    #     return lesson

@@ -6,7 +6,7 @@ from unfold.admin import ModelAdmin
 from unfold.forms import (AdminPasswordChangeForm, UserChangeForm,
                           UserCreationForm)
 
-from users.models import StudentLastActivity
+from users.models import StudentLastActivity, StudentProgress
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
@@ -31,3 +31,9 @@ class StudentStudentLastActivity(ModelAdmin):
     readonly_fields = ["last_viewed"]
     list_display_links = ["course", "last_lesson"]
     compressed_fields = True
+
+
+@admin.register(StudentProgress)
+class StudentLessonProgressAdmin(ModelAdmin):
+    list_display = ["student", "lesson", "is_complete"]
+    readonly_fields = ["complete_at"]

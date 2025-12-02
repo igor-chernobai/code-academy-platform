@@ -1,27 +1,26 @@
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db.models import Count
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView
+from django.views import View, generic
 
-from courses.models import Course, Lesson, LessonProgress
-from users.forms import CourseEnrollForm, UserLoginForm, UserRegisterForm
-from users.models import StudentLastActivity
+from courses.models import Course, Lesson
+from users import forms as student_forms
+from users.models import StudentLastActivity, StudentProgress
 from users.services.user_lessons import get_last_student_lesson
 
-from .services.student_course_enroll import is_student_enrolled
+from .mixins import StudentCourseAccessMixin
 
 
 class UserLoginView(LoginView):
-    form_class = UserLoginForm
+    form_class = student_forms.UserLoginForm
     template_name = "users/user_login.html"
 
 
-class UserRegisterView(CreateView):
-    form_class = UserRegisterForm
+class UserRegisterView(generic.CreateView):
+    form_class = student_forms.UserRegisterForm
     template_name = "users/user_registration.html"
     success_url = reverse_lazy("courses")
 
@@ -32,9 +31,9 @@ class UserRegisterView(CreateView):
         return response
 
 
-class StudentEnrollCourseView(LoginRequiredMixin, FormView):
+class StudentEnrollCourseView(LoginRequiredMixin, generic.FormView):
     course = None
-    form_class = CourseEnrollForm
+    form_class = student_forms.CourseEnrollForm
 
     def form_valid(self, form):
         self.course = form.cleaned_data["course"]
@@ -46,43 +45,66 @@ class StudentEnrollCourseView(LoginRequiredMixin, FormView):
         return reverse_lazy("users:student_course", args=[self.course.id])
 
 
-@login_required
-def student_course_list(request):
-    courses = Course.objects.filter(students=request.user).annotate(count_modules=Count("modules"),
-                                                                    count_lessons=Count("modules__lessons"))
-    context = {"courses": courses}
-    return render(request, "users/student_courses.html", context)
+class StudentCourseListView(LoginRequiredMixin, generic.ListView):
+    model = Course
+    template_name = "users/student_courses.html"
+    context_object_name = "courses"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(students=self.request.user).annotate(count_modules=Count("modules", distinct=True),
+                                                              count_lessons=Count("modules__lessons"))
 
 
-@login_required
-def student_course_lesson(request, course_id, lesson_slug=None):
-    course = Course.objects.prefetch_related("modules__lessons").get(id=course_id)
+class StudentLessonDetailView(LoginRequiredMixin, StudentCourseAccessMixin, generic.DetailView):
+    model = Lesson
+    template_name = "users/student_lesson.html"
+    slug_url_kwarg = "lesson_slug"
 
-    if not is_student_enrolled(course, request.user):
-        return redirect("courses:course_detail", slug=course.slug)
+    def get_object(self, queryset=None):
+        lesson_slug = self.kwargs.get("lesson_slug", None)
 
-    if lesson_slug:
-        lesson = get_object_or_404(Lesson.objects.select_related("module__course"), slug=lesson_slug)
-    else:
-        lesson = get_last_student_lesson(student=request.user, course=course)
-
-    StudentLastActivity.objects.update_or_create(student=request.user,
-                                                 course=course,
-                                                 defaults={"last_lesson": lesson})
-
-    context = {"course": course, "lesson": lesson}
-    return render(request, "users/student_lesson.html", context)
-
-
-def lesson_complete(request, slug):
-    lesson = get_object_or_404(Lesson.objects.select_related("module__course"), slug=slug)
-    if request.method == "POST":
-        LessonProgress.objects.create(student=request.user,
-                                      lesson=lesson,
-                                      is_complete=True)
-
-        next_lesson = lesson.get_next
-        if next_lesson:
-            return redirect("users:student_course_lesson", next_lesson.module.course.id, next_lesson.slug)
+        if lesson_slug:
+            lesson = get_object_or_404(Lesson.objects.select_related("module__course"),
+                                       slug=lesson_slug,
+                                       module__course=self.course)
         else:
+            lesson = get_last_student_lesson(student=self.request.user, course=self.course)
+
+        return lesson
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+
+        StudentLastActivity.objects.update_or_create(student=self.request.user,
+                                                     course=self.course,
+                                                     defaults={"last_lesson": self.object})
+
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["course"] = self.course
+        context["lesson_complete_form"] = student_forms.LessonCompleteForm(
+            initial={"lesson": self.object, "course": self.course})
+        return context
+
+
+class LessonCompleteView(LoginRequiredMixin, View):
+    form_class = student_forms.LessonCompleteForm
+    lesson = None
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            lesson = cd["lesson"]
+
+            StudentProgress.objects.get_or_create(student=request.user,
+                                                  lesson=lesson,
+                                                  defaults={"is_complete": True})
+            next_lesson = lesson.get_next
+            if next_lesson:
+                return redirect("users:student_course_lesson", cd["course"].id, next_lesson.slug)
             return redirect("course_list")
+        return redirect("course_list")

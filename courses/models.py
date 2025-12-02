@@ -45,6 +45,13 @@ class Module(models.Model):
         verbose_name_plural = "модулі"
         ordering = ["order"]
 
+    @property
+    def get_next_module(self):
+        next_modules = self.course.modules.filter(order__gt=self.order)
+        if next_modules.exists():
+            return next_modules.first()
+        return None
+
     def __str__(self):
         return self.title
 
@@ -65,10 +72,21 @@ class Lesson(models.Model):
         verbose_name = "лекція"
         verbose_name_plural = "лекції"
         ordering = ["order"]
+        constraints = [
+            models.UniqueConstraint(fields=["module", "order"], name="unique_lesson_order")
+        ]
 
     @property
     def get_next(self):
-        return Lesson.objects.filter(order__gt=self.order).first()
+        next_lessons = self.module.lessons.filter(order__gt=self.order)
+        if next_lessons.exists():
+            return next_lessons.first()
+        else:
+            next_module = self.module.get_next_module
+            if next_module:
+                return next_module.lessons.first()
+
+        return None
 
     def content_formatted(self):
         return mark_safe(
@@ -85,19 +103,3 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class LessonProgress(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="користувач")
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="лекція")
-    is_complete = models.BooleanField("завершено?")
-    complete_at = models.DateTimeField("дата завершення лекції", auto_now_add=True)
-
-    class Meta:
-        db_table = "lesson_progress"
-        verbose_name = "прогрес лекції"
-        verbose_name_plural = "прогрес лекцій"
-
-    def __str__(self):
-        status = "Завершено" if self.is_complete else "Не завершено"
-        return f"{self.student} - {self.lesson} ({status})"

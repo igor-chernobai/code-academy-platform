@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, StackedInline
 
-from courses.models import Course, Lesson, LessonProgress, Module
+from courses.models import Course, Lesson, Module
 
 
 class ModuleInline(StackedInline):
@@ -38,9 +38,3 @@ class LessonAdmin(ModelAdmin):
     search_fields = ["title"]
     list_filter = ["module"]
     warn_unsaved_form = True
-
-
-@admin.register(LessonProgress)
-class LessonProgressAdmin(ModelAdmin):
-    list_display = ["student", "lesson", "is_complete"]
-    readonly_fields = ["complete_at"]

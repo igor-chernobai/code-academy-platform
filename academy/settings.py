@@ -185,11 +185,11 @@ UNFOLD = {
     "SITE_SUBHEADER": "Appears under SITE_HEADER",
     "SITE_URL": "/",
     "SITE_SYMBOL": "speed",  # symbol from icon set
-    "SHOW_HISTORY": True,  # show/hide "History" button, default: True
-    "SHOW_VIEW_ON_SITE": True,  # show/hide "View on site" button, default: True
+    "SHOW_HISTORY": False,  # show/hide "History" button, default: True
+    "SHOW_VIEW_ON_SITE": False,  # show/hide "View on site" button, default: True
     "SHOW_BACK_BUTTON": False,  # show/hide "Back" button on changeform in header, default: False
     "THEME": "light",  # Force theme: "dark" or "light". Will disable theme switcher
-    "BORDER_RADIUS": "10px",
+    "BORDER_RADIUS": "6px",
     "COLORS": {
         "base": {
             "50": "oklch(98.5% .002 247.839)",
@@ -228,7 +228,7 @@ UNFOLD = {
     },
     "SIDEBAR": {
         "show_search": True,  # Search in applications and models names
-        "command_search": True,  # Replace the sidebar search with the command search
+        "command_search": False,  # Replace the sidebar search with the command search
         "show_all_applications": False,  # Dropdown with all applications and models
     },
 }
