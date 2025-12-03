@@ -5,7 +5,7 @@ from django.views import generic
 
 from courses.models import Course
 from users.forms import CourseEnrollForm
-from users.services.student_course_enroll import is_student_enrolled
+from users.services.student_course import is_student_enrolled
 
 
 class CourseListView(generic.ListView):

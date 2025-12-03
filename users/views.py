@@ -3,16 +3,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.db.models import Count
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View, generic
 
 from courses.models import Course, Lesson
 from users import forms as student_forms
 from users.models import StudentLastActivity, StudentProgress
-from users.services.user_lessons import get_last_student_lesson
-
-from .mixins import StudentCourseAccessMixin
+from users.services.student_course import (get_course_for_student,
+                                           get_lesson_for_student)
 
 
 class UserLoginView(LoginView):
@@ -54,25 +53,30 @@ class StudentCourseListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "courses"
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(students=self.request.user).annotate(count_modules=Count("modules", distinct=True),
-                                                              count_lessons=Count("modules__lessons"))
+        key = f"courses_for_{self.request.user.id}"
+        courses = cache.get(key)
+
+        if courses is None:
+            courses = super().get_queryset().filter(students=self.request.user).annotate(
+                count_modules=Count("modules", distinct=True),
+                count_lessons=Count("modules__lessons"))
+            cache.set(key, courses, 300)
+        return courses
 
 
-class StudentLessonDetailView(LoginRequiredMixin, StudentCourseAccessMixin, generic.DetailView):
+class StudentLessonDetailView(LoginRequiredMixin, generic.DetailView):
     model = Lesson
     template_name = "users/student_lesson.html"
     slug_url_kwarg = "lesson_slug"
+    course = None
 
     def get_object(self, queryset=None):
+        course_id = self.kwargs.get("course_id", None)
         lesson_slug = self.kwargs.get("lesson_slug", None)
+        student = self.request.user
 
-        if lesson_slug:
-            lesson = get_object_or_404(Lesson.objects.select_related("module__course"),
-                                       slug=lesson_slug,
-                                       module__course=self.course)
-        else:
-            lesson = get_last_student_lesson(student=self.request.user, course=self.course)
+        self.course = get_course_for_student(student, course_id)  # get course with cache
+        lesson = get_lesson_for_student(student, self.course, lesson_slug)  # get lesson with cache
 
         return lesson
 

@@ -42,11 +42,7 @@
           {% csrf_token %}
           {{ lesson_complete_form.as_p }}
           <button class="block px-5 py-2 rounded-xl bg-[#ff9d32] text-white font-semibold shadow-sm cursor-pointer">
-            {% if lesson.get_next %}
               Наступна лекція
-            {% else %}
-              Завершити курс
-            {% endif %}
           </button>
         </form>
       </div>
