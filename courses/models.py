@@ -91,7 +91,7 @@ class Lesson(models.Model):
     def content_formatted(self):
         return mark_safe(
             markdown(self.content,
-                     extensions=['extra', 'sane_lists', 'fenced_code', 'nl2br', 'codehilite', 'toc', 'legacy_attrs'],
+                     extensions=['extra', 'fenced_code', 'codehilite', 'toc'],
                      extension_configs={
                          'codehilite': {
                              'linenums': False,

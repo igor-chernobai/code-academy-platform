@@ -1,4 +1,3 @@
-from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
@@ -17,18 +16,6 @@ from users.services.student_course import (get_course_for_student,
 class UserLoginView(LoginView):
     form_class = student_forms.UserLoginForm
     template_name = "users/user_login.html"
-
-
-class UserRegisterView(generic.CreateView):
-    form_class = student_forms.UserRegisterForm
-    template_name = "users/user_registration.html"
-    success_url = reverse_lazy("course_list")
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        user = form.instance
-        login(self.request, user)
-        return response
 
 
 class StudentEnrollCourseView(LoginRequiredMixin, generic.FormView):

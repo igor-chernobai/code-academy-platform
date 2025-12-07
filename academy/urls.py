@@ -27,6 +27,7 @@ urlpatterns = [
     path(r'mdeditor/', include('mdeditor.urls')),
     path("courses/", include("courses.urls")),
     path("users/", include("users.urls")),
+    path("subscriptions/", include("subscriptions.urls")),
     path("", CourseListView.as_view(), name="course_list")
 ]
 

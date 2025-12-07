@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "courses",
     "users",
+    "subscriptions",
 
     "mdeditor",
     "debug_toolbar"

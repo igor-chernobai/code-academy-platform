@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="flex items-center justify-center min-h-screen">
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-xl">
       <h2 class="text-2xl font-bold text-center text-gray-800">Увійти</h2>
       <form action="{% url 'users:login' %}" method="post" class="space-y-4">
@@ -11,7 +11,7 @@
         {% for field in form %}
           <div>
             <label for="{{ field.id_for_label }}"
-                   class="block mb-1 text-sm font-medium text-gray-700">{{ field.label }}</label>
+                   class="label">{{ field.label }}</label>
             {{ field }}
             {% if field.errors %}
               <p class="mt-1 text-sm text-red-500">{{ field.errors|striptags }}</p>
@@ -26,7 +26,7 @@
 
         <p class="mt-4 text-sm text-center text-gray-600">
           Ще немає акаунта?
-          <a href="{% url 'users:register' %}" class="text-blue-600 hover:underline">Зареєструватися</a>
+          <a href="{% url 'subscriptions:subscription_create' %}" class="text-blue-600 hover:underline">Зареєструватися</a>
         </p>
       </form>
     </div>

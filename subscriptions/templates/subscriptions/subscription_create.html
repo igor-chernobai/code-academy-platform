@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+  <form method="POST" id="main-subscription-form" action="{% url 'subscriptions:subscription_create' %}">
+    {% csrf_token %}
+
+    <div class="mt-16 pt-12 min-h-screen font-inter bg-[#f3f4f6]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <header class="text-center mb-10">
+          <h1 class="text-4xl sm:text-6xl font-black text-[#19183B] uppercase tracking-tight mb-4">
+            Обери свій шлях
+          </h1>
+          <p class="text-lg font-medium text-[#708993] max-w-2xl mx-auto">
+            Доступ до закритих знань. Зміни своє життя вже сьогодні.
+          </p>
+        </header>
+
+        <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
+
+          <div class="p-8 sm:p-12">
+
+            <div class="mb-12">
+              <h2 class="text-2xl font-bold text-[#19183B] mb-6 flex items-center">
+                <span
+                    class="bg-[#ff9d32] text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm font-black shadow-md shadow-[#ff9d32]/30">1</span>
+                Оберіть рівень доступу
+              </h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for plan in plans %}
+                  <div class="relative group">
+                    <input type="radio"
+                           id="plan_{{ plan.id }}"
+                           name="plan"
+                           value="{{ plan.id }}"
+                           class="peer hidden plan-radio-input">
+
+                    <label for="plan_{{ plan.id }}"
+                           class="flex flex-col h-full cursor-pointer relative
+                                    bg-gray-50 rounded-2xl p-6 border-2 border-transparent
+                                    transition-all duration-200 ease-out
+                                    hover:bg-white hover:border-gray-300 hover:shadow-lg
+                                    peer-checked:border-[#ff9d32]
+                                    peer-checked:bg-white
+                                    peer-checked:shadow-[0_10px_30px_rgba(255,157,50,0.15)]
+                                    peer-checked:transform peer-checked:scale-[1.02]
+                                    peer-checked:z-10">
+
+                      <div
+                          class="absolute top-4 right-4 text-[#ff9d32] opacity-0 peer-checked:opacity-100 transition-opacity transform peer-checked:scale-110">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                      </div>
+
+                      <div class="mb-4">
+                        <h3 class="text-xl font-bold text-[#19183B] uppercase tracking-wide group-hover:text-[#ff9d32] transition-colors">{{ plan.name }}</h3>
+                      </div>
+
+                      <div class="mt-auto">
+                        <div class="flex items-baseline mb-2">
+                          <span class="text-4xl font-extrabold text-[#19183B]">{{ plan.price }}</span>
+                          <span class="text-sm text-[#708993] font-semibold ml-1">грн</span>
+                        </div>
+                        <p class="text-xs text-[#708993] font-medium uppercase tracking-wider">
+                          {% if plan.interval %}
+                            Кожні {{ plan.interval }} днів
+                          {% else %}
+                            Період не вказано
+                          {% endif %}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div id="step-2-wrapper" class="hidden opacity-0 translate-y-4 transition-all duration-700 ease-out">
+
+              <div class="pt-8 border-t border-gray-100">
+                <h2 class="text-2xl font-bold text-[#19183B] mb-6 flex items-center">
+                  <span
+                      class="bg-[#ff9d32] text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm font-black shadow-md shadow-[#ff9d32]/30">2</span>
+                  Створіть обліковий запис
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                  <!-- Username -->
+                  <div>
+                    <label for="{{ form.username.id_for_label }}" class="label">{{ form.username.label }}</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                      <p class="text-red-500 text-xs mt-1 font-medium">{{ form.username.errors.0 }}</p>
+                    {% endif %}
+                  </div>
+
+                  <!-- First Name -->
+                  <div>
+                    <label for="{{ form.first_name.id_for_label }}" class="label">{{ form.first_name.label }}</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                      <p class="text-red-500 text-xs mt-1 font-medium">{{ form.first_name.errors.0 }}</p>
+                    {% endif %}
+                  </div>
+
+                  <!-- Password -->
+                  <div>
+                    <label for="{{ form.password1.id_for_label }}" class="label">{{ form.password1.label }}</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                      <p class="text-red-500 text-xs mt-1 font-medium">{{ form.password1.errors.0 }}</p>
+                    {% endif %}
+                  </div>
+
+                  <!-- Password Confirm -->
+                  <div>
+                    <label for="{{ form.password2.id_for_label }}" class="label">{{ form.password2.label }}</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                      <p class="text-red-500 text-xs mt-1 font-medium">{{ form.password2.errors.0 }}</p>
+                    {% endif %}
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- SUBMIT ACTION -->
+              <div class="mt-12">
+                <button type="submit"
+                        class="w-full py-4 text-xl font-black uppercase tracking-widest text-white bg-[#19183B] rounded-xl
+                                   hover:bg-[#ff9d32] hover:text-white hover:shadow-xl hover:shadow-[#ff9d32]/40
+                                   transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                  Отримати доступ зараз
+                </button>
+                <p class="text-center text-[#708993] text-xs mt-4 font-medium">
+                  Натискаючи кнопку, ви погоджуєтесь з умовами використання. Безпечна оплата.
+                </p>
+              </div>
+            </div> <!-- End of step-2-wrapper -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const planRadios = document.querySelectorAll('.plan-radio-input');
+          const step2Wrapper = document.getElementById('step-2-wrapper');
+          let isVisible = false;
+
+          function showStep2() {
+              if (isVisible) return;
+
+              step2Wrapper.classList.remove('hidden');
+
+              setTimeout(() => {
+                  step2Wrapper.classList.remove('opacity-0', 'translate-y-4');
+
+                  step2Wrapper.scrollIntoView({behavior: 'smooth', block: 'start'});
+              }, 50);
+
+              isVisible = true;
+          }
+
+          planRadios.forEach(radio => {
+              radio.addEventListener('change', showStep2);
+
+              if (radio.checked) {
+                  showStep2();
+              }
+          });
+      });
+  </script>
+
+{% endblock %}
