@@ -1,7 +1,22 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from courses.models import Course, Lesson
+# from courses.models import Course, Lesson
+from users.managers import CustomUserManager
+
+
+class User(AbstractUser):
+    username = None
+    email = models.EmailField("email", unique=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
 
 
 class StudentLastActivity(models.Model):
@@ -11,12 +26,12 @@ class StudentLastActivity(models.Model):
         verbose_name="студент"
     )
     course = models.ForeignKey(
-        Course,
+        "courses.Course",
         on_delete=models.CASCADE,
         verbose_name="курс"
     )
     last_lesson = models.ForeignKey(
-        Lesson,
+        "courses.Lesson",
         on_delete=models.CASCADE,
         related_name="last_lesson",
         verbose_name="остання лекція"
@@ -37,8 +52,12 @@ class StudentLastActivity(models.Model):
 
 
 class StudentProgress(models.Model):
-    student = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name="користувач")
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="лекція")
+    student = models.ForeignKey(get_user_model(),
+                                on_delete=models.CASCADE,
+                                verbose_name="користувач")
+    lesson = models.ForeignKey("courses.Lesson",
+                               on_delete=models.CASCADE,
+                               verbose_name="лекція")
     is_complete = models.BooleanField("завершено?")
     complete_at = models.DateTimeField("дата завершення лекції", auto_now_add=True)
 

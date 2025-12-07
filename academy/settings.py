@@ -192,6 +192,10 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/users/login/'
 
+AUTHENTICATION_BACKENDS = ["users.backends.EmailAuthBackend"]
+
+AUTH_USER_MODEL = "users.User"
+
 # Unfold Admin
 UNFOLD = {
     "SITE_TITLE": "Custom suffix in <title> tag",

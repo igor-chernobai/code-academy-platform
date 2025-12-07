@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -13,8 +13,8 @@ class Course(models.Model):
     image = models.ImageField("зображення", upload_to="course_image/", blank=True, null=True)
     short_description = models.TextField("коротко про курс")
     about = models.TextField("про курс")
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="власник")
-    students = models.ManyToManyField(User, related_name="courses_joined", blank=True)
+    owner = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True, verbose_name="власник")
+    students = models.ManyToManyField(get_user_model(), related_name="courses_joined", blank=True)
 
     class Meta:
         db_table = "course"

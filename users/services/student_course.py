@@ -36,7 +36,7 @@ def get_lesson_for_student(student: User, course: Course, lesson_slug: str) -> L
         else:
             try:
                 lesson = StudentLastActivity.objects.get(student=student, course=course).last_lesson
-            except lesson.DoesNotExist:
+            except StudentLastActivity.DoesNotExist:
                 lesson = Lesson.objects.select_related("module__course").filter(module__course=course).first()
 
     cache.set(lesson_key, lesson, 300)

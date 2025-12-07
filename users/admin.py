@@ -1,22 +1,60 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
+from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
-from unfold.forms import (AdminPasswordChangeForm, UserChangeForm,
-                          UserCreationForm)
+from unfold.forms import AdminPasswordChangeForm, UserChangeForm
 
+from users.forms import CustomUserCreationForm
 from users.models import StudentLastActivity, StudentProgress
 
-admin.site.unregister(User)
 admin.site.unregister(Group)
 
 
-@admin.register(User)
-class UserAdmin(BaseUserAdmin, ModelAdmin):
-    # Forms loaded from `unfold.forms`
+@admin.register(get_user_model())
+class UserAdmin(UserAdmin, ModelAdmin):
+    readonly_fields = ["last_login", "date_joined"]
+    compressed_fields = True
+    fieldsets = (
+
+        (_("Personal info"), {
+            "classes": ["tab"],
+            "fields": ("email", "password", "first_name", "last_name", "last_login", "date_joined")}),
+        (
+            _("Permissions"),
+            {
+                "classes": ["tab"],
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "first_name", "last_name", "password", "password2"),
+            },
+        ),
+    )
+    list_display = ("email", "first_name", "last_name", "is_staff")
+    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
+    search_fields = ("first_name", "last_name", "email")
+    filter_horizontal = (
+        "groups",
+        "user_permissions",
+    )
+    ordering = ("email",)
     form = UserChangeForm
-    add_form = UserCreationForm
+    add_form = CustomUserCreationForm
     change_password_form = AdminPasswordChangeForm
 
 
