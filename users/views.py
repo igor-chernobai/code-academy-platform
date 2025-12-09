@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView
 from django.core.cache import cache
 from django.db.models import Count
 from django.shortcuts import redirect
@@ -8,6 +8,7 @@ from django.views import View, generic
 
 from courses.models import Course, Lesson
 from users import forms as student_forms
+from users.forms import StudentPasswordChangeForm
 from users.models import StudentLastActivity, StudentProgress
 from users.services.student_course import (get_course_for_student,
                                            get_lesson_for_student)
@@ -102,3 +103,13 @@ class LessonCompleteView(LoginRequiredMixin, View):
                 return redirect("users:student_course_lesson", cd["course"].id, next_lesson.slug)
             return redirect("course_list")
         return redirect("course_list")
+
+
+class StudentPasswordChangeView(PasswordChangeView):
+    template_name = "users/password_change.html"
+    form_class = StudentPasswordChangeForm
+    success_url = reverse_lazy("course_list")
+
+
+class StudentPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = "users/password_change_done.html"

@@ -90,12 +90,12 @@
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                  <!-- Username -->
+                  <!-- Email -->
                   <div>
-                    <label for="{{ form.username.id_for_label }}" class="label">{{ form.username.label }}</label>
-                    {{ form.username }}
-                    {% if form.username.errors %}
-                      <p class="text-red-500 text-xs mt-1 font-medium">{{ form.username.errors.0 }}</p>
+                    <label for="{{ form.email.id_for_label }}" class="label">{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                      <p class="text-red-500 text-xs mt-1 font-medium">{{ form.email.errors.0 }}</p>
                     {% endif %}
                   </div>
 
