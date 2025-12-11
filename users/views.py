@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import (LoginView, PasswordChangeDoneView,
+                                       PasswordChangeView)
 from django.core.cache import cache
 from django.db.models import Count
 from django.shortcuts import redirect

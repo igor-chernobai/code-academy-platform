@@ -250,3 +250,6 @@ UNFOLD = {
         "show_all_applications": False,  # Dropdown with all applications and models
     },
 }
+
+# Django email
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

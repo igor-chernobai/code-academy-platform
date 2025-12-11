@@ -10,7 +10,7 @@
 }
 
 @layer components {
-    .input {
+    input {
         width: 100%;
         background-color: var(--color-gray-50);
         border-width: 1px;
@@ -34,7 +34,7 @@
         }
     }
 
-    .label {
+    label {
         display: block;
         margin-bottom: --spacing(2);
         font-size: var(--text-xs);
