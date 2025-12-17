@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     "courses",
     "users",
     "subscriptions",
+    "api",
 
     "mdeditor",
-    "debug_toolbar"
+    "debug_toolbar",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
