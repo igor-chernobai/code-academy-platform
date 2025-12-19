@@ -28,6 +28,7 @@ urlpatterns = [
     path("courses/", include("courses.urls")),
     path("users/", include("users.urls")),
     path("subscriptions/", include("subscriptions.urls")),
+    path("api/", include("api.urls")),
     path("", CourseListView.as_view(), name="course_list")
 ]
 
