@@ -10,9 +10,10 @@ from django.views import View, generic
 from courses.models import Course, Lesson
 from users import forms as student_forms
 from users.forms import StudentPasswordChangeForm
-from users.models import StudentLastActivity, StudentProgress
+from users.models import StudentProgress
 from users.services.student_course import (get_course_for_student,
-                                           get_lesson_for_student)
+                                           get_lesson_for_student,
+                                           updated_activity)
 
 
 class UserLoginView(LoginView):
@@ -65,17 +66,15 @@ class StudentLessonDetailView(LoginRequiredMixin, generic.DetailView):
         student = self.request.user
 
         self.course = get_course_for_student(student, course_id)  # get course with cache
-        lesson = get_lesson_for_student(student, self.course, lesson_slug)  # get lesson with cache
+        lesson = get_lesson_for_student(student, self.course.id, lesson_slug)  # get lesson with cache
 
         return lesson
 
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
-
-        StudentLastActivity.objects.update_or_create(student=self.request.user,
-                                                     course=self.course,
-                                                     defaults={"last_lesson": self.object})
-
+        updated_activity(student=self.request.user,
+                         course_id=self.course.id,
+                         last_lesson_id=self.object.id)
         return response
 
     def get_context_data(self, **kwargs):
