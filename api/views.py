@@ -4,6 +4,7 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.permissions import IsEnrolled
 from courses.models import Course, Lesson
 from courses.serializers import CourseSerializer, LessonSerializer
 from users.services.student_course import (get_lesson_for_student,
@@ -34,6 +35,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 class StudentLessonRetrieveAPIView(RetrieveAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    permission_classes = [IsAuthenticated, IsEnrolled]
 
     def get_object(self):
         course_id = self.kwargs.get('course_id')
