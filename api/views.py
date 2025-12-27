@@ -1,12 +1,13 @@
-from rest_framework import status, viewsets
+from django.contrib.auth import get_user_model
+from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.generics import RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from api.permissions import IsEnrolled
 from courses.models import Course, Lesson
 from courses.serializers import CourseSerializer, LessonSerializer
+from users.serializers import UserSerializer
 from users.services.student_course import (get_lesson_for_student,
                                            updated_activity)
 
@@ -33,7 +34,7 @@ class CourseViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_200_OK)
 
 
-class StudentLessonRetrieveAPIView(RetrieveAPIView):
+class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsEnrolled]
@@ -50,3 +51,9 @@ class StudentLessonRetrieveAPIView(RetrieveAPIView):
                          course_id=course_id,
                          last_lesson_id=lesson.id)
         return lesson
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = UserSerializer
+    queryset = get_user_model().objects.all()
+    permission_classes = [IsAdminUser]

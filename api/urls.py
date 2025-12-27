@@ -8,11 +8,12 @@ app_name = 'api'
 
 router = DefaultRouter()
 router.register(r'courses', views.CourseViewSet)
+router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
     path('course/<int:course_id>/lesson/<slug:slug>/', views.StudentLessonRetrieveAPIView.as_view()),
     path('course/<int:course_id>/', views.StudentLessonRetrieveAPIView.as_view()),
     # path('lesson/<int:pk>/', views.StudentLessonRetrieveAPIView.as_view())
-    path('auth-token/', obtain_auth_token)
+    path('auth-token/', obtain_auth_token),
 ]
