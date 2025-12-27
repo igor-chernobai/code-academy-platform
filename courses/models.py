@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -103,3 +104,23 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Review(models.Model):
+    student = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='студент')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс')
+    text = models.TextField('текст')
+    created_at = models.DateTimeField('дата створення', auto_now_add=True)
+    rating = models.IntegerField('рейтинг',
+                                         validators=[MaxValueValidator(5,
+                                                                       message='Максимальне допустиме значення - 5'),
+                                                     MinValueValidator(1,
+                                                                       message='Мінімальне допустиме значення - 1')])
+
+    class Meta:
+        db_table = 'reviews'
+        verbose_name = 'відгук'
+        verbose_name_plural = 'відгуки'
+
+    def __str__(self):
+        return f'{self.course} (Рейтинг: {self.rating})'
