@@ -1,19 +1,10 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import ValidationError
 from unfold.forms import UserCreationForm
 
 from courses.models import Course, Lesson
-
-
-class UserLoginForm(AuthenticationForm):
-    username = forms.CharField(label="Email",
-                               widget=forms.TextInput(attrs={
-                                   "class": "input"}))
-    password = forms.CharField(label="Пароль",
-                               widget=forms.PasswordInput(attrs={
-                                   "class": "input"}))
 
 
 class CourseEnrollForm(forms.Form):

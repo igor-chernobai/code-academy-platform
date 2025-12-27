@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import (LoginView, PasswordChangeDoneView,
+from django.contrib.auth.views import (PasswordChangeDoneView,
                                        PasswordChangeView)
 from django.core.cache import cache
 from django.db.models import Count
@@ -13,11 +13,6 @@ from users.forms import StudentPasswordChangeForm
 from users.models import StudentLastActivity, StudentProgress
 from users.services.student_course import (get_course_for_student,
                                            get_lesson_for_student)
-
-
-class UserLoginView(LoginView):
-    form_class = student_forms.UserLoginForm
-    template_name = "users/user_login.html"
 
 
 class StudentEnrollCourseView(LoginRequiredMixin, generic.FormView):
@@ -107,10 +102,10 @@ class LessonCompleteView(LoginRequiredMixin, View):
 
 
 class StudentPasswordChangeView(PasswordChangeView):
-    template_name = "users/password_change.html"
+    template_name = "users/templates/registration/password_change.html"
     form_class = StudentPasswordChangeForm
     success_url = reverse_lazy("course_list")
 
 
 class StudentPasswordChangeDoneView(PasswordChangeDoneView):
-    template_name = "users/password_change_done.html"
+    template_name = "users/templates/registration/password_change_done.html"
