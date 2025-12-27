@@ -43,9 +43,13 @@ INSTALLED_APPS = [
     "courses",
     "users",
     "subscriptions",
+    "api",
 
     "mdeditor",
-    "debug_toolbar"
+    "debug_toolbar",
+    "rest_framework",
+    'rest_framework.authtoken',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -90,18 +94,18 @@ INTERNAL_IPS = [
     # ...
 ]
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-#         "LOCATION": BASE_DIR / "cache",
-#     }
-# }
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "cache",
     }
 }
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379",
+#     }
+# }
 
 DATABASES = {
     'default': {
@@ -253,3 +257,9 @@ UNFOLD = {
 
 # Django email
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
