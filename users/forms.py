@@ -44,3 +44,9 @@ class StudentPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(label="Старий пароль", widget=forms.PasswordInput(attrs={"class": "input"}))
     new_password1 = forms.CharField(label="Новий пароль", widget=forms.PasswordInput(attrs={"class": "input"}))
     new_password2 = forms.CharField(label="Повторіть пароль", widget=forms.PasswordInput(attrs={"class": "input"}))
+
+
+class StudentProfileForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['email', 'first_name', 'last_name']

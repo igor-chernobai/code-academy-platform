@@ -112,10 +112,10 @@ class Review(models.Model):
     text = models.TextField('текст')
     created_at = models.DateTimeField('дата створення', auto_now_add=True)
     rating = models.IntegerField('рейтинг',
-                                         validators=[MaxValueValidator(5,
-                                                                       message='Максимальне допустиме значення - 5'),
-                                                     MinValueValidator(1,
-                                                                       message='Мінімальне допустиме значення - 1')])
+                                 validators=[MaxValueValidator(5,
+                                                               message='Максимальне допустиме значення - 5'),
+                                             MinValueValidator(1,
+                                                               message='Мінімальне допустиме значення - 1')])
 
     class Meta:
         db_table = 'reviews'

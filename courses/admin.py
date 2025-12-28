@@ -1,15 +1,15 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, StackedInline
 
-from courses.models import *
+from courses import models
 
 
 class ModuleInline(StackedInline):
-    model = Module
+    model = models.Module
     tab = True
 
 
-@admin.register(Course)
+@admin.register(models.Course)
 class CourseAdmin(ModelAdmin):
     list_display = ["title", "owner", "created"]
     prepopulated_fields = {"slug": ["title"]}
@@ -19,7 +19,7 @@ class CourseAdmin(ModelAdmin):
     inlines = [ModuleInline]
 
 
-@admin.register(Module)
+@admin.register(models.Module)
 class ModuleAdmin(ModelAdmin):
     list_display = ["course", "title", "created", "order"]
     list_display_links = ["title"]
@@ -28,7 +28,7 @@ class ModuleAdmin(ModelAdmin):
     compressed_fields = True
 
 
-@admin.register(Lesson)
+@admin.register(models.Lesson)
 class LessonAdmin(ModelAdmin):
     list_display = ["module", "title", "created", "order"]
     list_display_links = ["title"]
@@ -40,7 +40,7 @@ class LessonAdmin(ModelAdmin):
     warn_unsaved_form = True
 
 
-@admin.register(Review)
+@admin.register(models.Review)
 class ReviewAdmin(ModelAdmin):
     list_display = ['student', 'course', 'rating']
     readonly_fields = ['created_at']

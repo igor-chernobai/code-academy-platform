@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (PasswordChangeDoneView,
                                        PasswordChangeView)
@@ -9,7 +10,7 @@ from django.views import View, generic
 
 from courses.models import Course, Lesson
 from users import forms as student_forms
-from users.forms import StudentPasswordChangeForm
+from users.forms import StudentPasswordChangeForm, StudentProfileForm
 from users.models import StudentProgress
 from users.services.student_course import (get_course_for_student,
                                            get_lesson_for_student,
@@ -108,3 +109,15 @@ class StudentPasswordChangeView(PasswordChangeView):
 
 class StudentPasswordChangeDoneView(PasswordChangeDoneView):
     template_name = "users/templates/registration/password_change_done.html"
+
+
+class StudentProfileView(LoginRequiredMixin, generic.UpdateView):
+    model = get_user_model()
+    template_name = 'users/profile.html'
+    form_class = StudentProfileForm
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user
