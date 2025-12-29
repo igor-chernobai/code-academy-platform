@@ -23,5 +23,6 @@ def subscription_create(request):
     else:
 
         form = StudentRegistrationWithPlanForm()
-        context = {"form": form, "plans": SubscriptionPlan.objects.all()}
-        return render(request, "subscriptions/subscription_create.html", context)
+
+    context = {"form": form, "plans": SubscriptionPlan.objects.all()}
+    return render(request, "subscriptions/subscription_create.html", context)

@@ -2,16 +2,16 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# from courses.models import Course, Lesson
 from users.managers import CustomUserManager
 
 
 class User(AbstractUser):
     username = None
     email = models.EmailField("email", unique=True)
+    photo = models.ImageField('зображення', upload_to='users/', blank=True, null=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['first_name']
+    REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 

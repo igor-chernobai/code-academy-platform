@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-  <div class="flex items-center justify-center min-h-screen bg-gray-100 p-6">
 
     <div class="w-full max-w-4xl p-8 space-y-8 bg-white rounded-2xl shadow-2xl">
 
@@ -16,13 +16,21 @@
         </div>
       {% endif %}
 
-      <form action="#" method="post" enctype="multipart/form-data" class="space-y-6">
         {% csrf_token %}
+
+        <div class="flex flex-col items-center space-y-4">
+            {% if user.photo %}
+              <img src="{{ user.photo.url }}" alt="{{ user.username }}"
+                   class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
+            {% else %}
+              <img src="{% static 'img/avatar.png' %}" alt="{{ user.username }}"
+                   class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
+            {% endif %}
+          <p class="text-xs text-gray-400 font-medium">Натисніть на поле вибору файлу нижче, щоб змінити фото</p>
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {% for field in form %}
-            <div>
-              <label for="{{ field.id_for_label }}">
                 {{ field.label }}
               </label>
 
@@ -40,7 +48,6 @@
         <div class="pt-6 border-t border-gray-100">
           <div class="flex justify-start">
             <button type="submit"
-                    class="px-6 py-3 bg-[#539db8] text-white font-semibold rounded-lg hover:bg-[#ff9d32] transition-colors duration-300 shadow-sm hover:shadow-md">
               Зберегти зміни
             </button>
           </div>

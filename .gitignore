@@ -49,3 +49,6 @@ staticfiles/
 
 # Windows
 Thumbs.db
+
+# Cache
+cache/

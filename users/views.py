@@ -101,23 +101,11 @@ class LessonCompleteView(LoginRequiredMixin, View):
         return redirect("course_list")
 
 
-class StudentPasswordChangeView(PasswordChangeView):
-    template_name = "users/templates/registration/password_change.html"
-    form_class = StudentPasswordChangeForm
-    success_url = reverse_lazy("course_list")
-
-
-class StudentPasswordChangeDoneView(PasswordChangeDoneView):
-    template_name = "users/templates/registration/password_change_done.html"
-
-
 class StudentProfileView(LoginRequiredMixin, generic.UpdateView):
     model = get_user_model()
     template_name = 'users/profile.html'
     form_class = StudentProfileForm
-
-    def get_success_url(self):
-        return reverse_lazy('users:profile')
+    success_url = reverse_lazy("users:profile")
 
     def get_object(self, queryset=None):
         return self.request.user
