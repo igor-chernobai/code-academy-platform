@@ -10,23 +10,25 @@ class SubscriptionPlan(models.Model):
     duration_days = models.PositiveIntegerField("інтервал плану")
 
     def __str__(self):
-        return f"{self.name.title()} (Ціна: {self.price}, інтервал: {self.duration_days})"
+        return self.name
 
 
-class StudentSubscription(models.Model):
+class Subscription(models.Model):
     student = models.ForeignKey(get_user_model(),
                                 on_delete=models.CASCADE,
+                                related_name='subscriptions',
                                 verbose_name="студент")
     plan = models.ForeignKey(SubscriptionPlan,
                              on_delete=models.CASCADE,
                              verbose_name="план")
     start_date = models.DateTimeField("дата покупки",
-                                      auto_now=True)
-    end_date = models.DateTimeField("дата покупки", blank=True)
+                                      auto_now_add=True)
+    end_date = models.DateTimeField("дата завершення", blank=True)
 
     @property
     def is_active(self):
         return self.end_date >= timezone.now()
 
     def __str__(self):
-        return f"{self.student} | {self.plan} | {self.is_active}"
+        status = 'Активна' if self.is_active else 'Не активна'
+        return f"{self.student} | {self.plan} | {status.capitalize()}"

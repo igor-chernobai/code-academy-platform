@@ -1,28 +1,25 @@
-from datetime import timedelta
-
 from django.contrib.auth import login
-from django.shortcuts import redirect, render
-from django.utils import timezone
+from django.views.generic import FormView
+from rest_framework.reverse import reverse_lazy
 
 from subscriptions.forms import StudentRegistrationWithPlanForm
-from subscriptions.models import StudentSubscription, SubscriptionPlan
+from subscriptions.models import SubscriptionPlan
+from subscriptions.services.subscription import subscription_create
 
 
-def subscription_create(request):
-    if request.method == "POST":
-        form = StudentRegistrationWithPlanForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            plan = form.cleaned_data["plan"]
+class SubscriptionFormView(FormView):
+    template_name = "subscriptions/subscription_create.html"
+    form_class = StudentRegistrationWithPlanForm
+    success_url = reverse_lazy("course_list")
+    extra_context = {
+        "plans": SubscriptionPlan.objects.all()
+    }
 
-            StudentSubscription.objects.create(student=user,
-                                               plan=plan,
-                                               end_date=timezone.now() + timedelta(plan.duration_days))
-            return redirect("course_list")
-    else:
+    def form_valid(self, form):
+        student = form.save()
+        plan = form.cleaned_data['plan']
 
-        form = StudentRegistrationWithPlanForm()
+        login(self.request, student)
+        subscription_create(student, plan)
 
-    context = {"form": form, "plans": SubscriptionPlan.objects.all()}
-    return render(request, "subscriptions/subscription_create.html", context)
+        return super().form_valid(form)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 
-from subscriptions.models import StudentSubscription, SubscriptionPlan
+from subscriptions.models import Subscription, SubscriptionPlan
 
 
 @admin.register(SubscriptionPlan)
@@ -10,7 +10,8 @@ class SubscriptionPlanAdmin(ModelAdmin):
     compressed_fields = True
 
 
-@admin.register(StudentSubscription)
-class StudentSubscriptionAdmin(ModelAdmin):
-    list_display = ["student", "plan", "start_date", "is_active"]
+@admin.register(Subscription)
+class SubscriptionAdmin(ModelAdmin):
+    list_display = ["student", "plan", "start_date", "end_date", "is_active"]
     compressed_fields = True
+    readonly_fields = ['start_date']

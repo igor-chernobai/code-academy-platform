@@ -2,7 +2,7 @@
 
 
 {% block content %}
-  <form method="POST" id="main-subscription-form" action="{% url 'subscriptions:subscription_create' %}">
+  <form action="{% url 'subscriptions:subscription_create' %}" method="POST" id="main-subscription-form" action="{% url 'subscriptions:subscription_create' %}">
     {% csrf_token %}
 
     <div class="mt-16 pt-12 min-h-screen font-inter bg-[#f3f4f6]">
@@ -67,8 +67,8 @@
                           <span class="text-sm text-[#708993] font-semibold ml-1">грн</span>
                         </div>
                         <p class="text-xs text-[#708993] font-medium uppercase tracking-wider">
-                          {% if plan.interval %}
-                            Кожні {{ plan.interval }} днів
+                          {% if plan.duration_days %}
+                            Кожні {{ plan.duration_days }} днів
                           {% else %}
                             Період не вказано
                           {% endif %}
