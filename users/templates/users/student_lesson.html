@@ -13,7 +13,7 @@
             </h3>
 
             {% for l in module.lessons.all %}
-              <a href="{% url 'users:student_course_lesson' course.id l.slug %}"
+              <a href="{% url 'students:student_course_lesson' course.id l.slug %}"
                  class="block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 mb-1
                       {% if l == lesson %}
                         bg-[#ff9d32] text-white font-semibold shadow-sm
@@ -38,7 +38,7 @@
       </article>
 
       <div class="flex justify-end">
-        <form action="{% url 'users:lesson_complete' %}" method="post">
+        <form action="{% url 'students:lesson_complete' %}" method="post">
           {% csrf_token %}
           {{ lesson_complete_form.as_p }}
           <button class="block px-5 py-2 rounded-xl bg-[#ff9d32] text-white font-semibold shadow-sm cursor-pointer">

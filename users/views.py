@@ -1,7 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import (PasswordChangeDoneView,
-                                       PasswordChangeView)
 from django.core.cache import cache
 from django.db.models import Count
 from django.shortcuts import redirect
@@ -10,7 +8,7 @@ from django.views import View, generic
 
 from courses.models import Course, Lesson
 from users import forms as student_forms
-from users.forms import StudentPasswordChangeForm, StudentProfileForm
+from users.forms import StudentProfileForm
 from users.models import StudentProgress
 from users.services.student_course import (get_course_for_student,
                                            get_lesson_for_student,
@@ -30,7 +28,7 @@ class StudentEnrollCourseView(LoginRequiredMixin, generic.FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy("users:student_course", args=[self.course.id])
+        return reverse_lazy("students:student_course", args=[self.course.id])
 
 
 class StudentCourseListView(LoginRequiredMixin, generic.ListView):
@@ -96,7 +94,7 @@ class LessonCompleteView(LoginRequiredMixin, View):
                                                   defaults={"is_complete": True})
             next_lesson = lesson.get_next
             if next_lesson:
-                return redirect("users:student_course_lesson", cd["course"].id, next_lesson.slug)
+                return redirect("students:student_course_lesson", cd["course"].id, next_lesson.slug)
             return redirect("course_list")
         return redirect("course_list")
 
@@ -105,7 +103,7 @@ class StudentProfileView(LoginRequiredMixin, generic.UpdateView):
     model = get_user_model()
     template_name = 'users/profile.html'
     form_class = StudentProfileForm
-    success_url = reverse_lazy("users:profile")
+    success_url = reverse_lazy("students:profile")
 
     def get_object(self, queryset=None):
         return self.request.user

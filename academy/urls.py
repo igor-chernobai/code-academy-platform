@@ -26,7 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'mdeditor/', include('mdeditor.urls')),
     path("courses/", include("courses.urls")),
-    path("users/", include("users.urls")),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path("students/", include("users.urls", namespace='students')),
     path("subscriptions/", include("subscriptions.urls")),
     path("api/", include("api.urls")),
     path("", CourseListView.as_view(), name="course_list")

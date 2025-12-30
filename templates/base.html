@@ -43,19 +43,19 @@
           </div>
 
           <ul class="p-2 text-sm text-[#19183B] font-medium space-y-2">
-            <li><a href="{% url 'users:profile' %}" class="block text-center rounded-xl p-2 hover:bg-gray-100 transition">Мій профіль</a></li>
-            <li><a href="{% url 'users:student_course_list' %}" class="block text-center rounded-xl p-2 hover:bg-gray-100 transition">Моє навчання</a></li>
-            <li><a href="{% url 'users:password_change' %}" class="block text-center rounded-xl p-2 hover:bg-gray-100 transition">Змінити пароль</a></li>
+            <li><a href="{% url 'students:profile' %}" class="block text-center rounded-xl p-2 hover:bg-gray-100 transition">Мій профіль</a></li>
+            <li><a href="{% url 'student_course_list' %}" class="block text-center rounded-xl p-2 hover:bg-gray-100 transition">Моє навчання</a></li>
+            <li><a href="{% url 'password_change' %}" class="block text-center rounded-xl p-2 hover:bg-gray-100 transition">Змінити пароль</a></li>
 {#            <li><a href="#" class="block p-2 rounded hover:bg-[#f5f5f5] transition">Dashboard</a></li>#}
 {#            <li><a href="#" class="block p-2 rounded hover:bg-[#f5f5f5] transition">Settings</a></li>#}
-            <form action="{% url 'users:logout' %}" method="post" class="grid">
+            <form action="{% url 'logout' %}" method="post" class="grid">
               {% csrf_token %}
               <button type="submit" class="rounded-xl p-2 hover:bg-red-500 transition">Вийти</button>
             </form>
           </ul>
         </div>
       {% else %}
-        <a href="{% url 'users:login' %}"
+        <a href="{% url 'login' %}"
            class="inline-block text-white bg-[#539db8] hover:bg-[#ff9d32] focus:ring-4 focus:ring-[#A1C2BD]/50 shadow-md font-semibold rounded-lg text-sm px-4 py-2 transition-all duration-200">
           Увійти
         </a>
