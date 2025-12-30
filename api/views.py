@@ -6,7 +6,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-from api.permissions import IsEnrolled
+from api.permissions import IsEnrolled, IsAdminOrReadOnly
 from courses.models import Course, Lesson
 from courses.serializers import CourseSerializer, LessonSerializer
 from users.serializers import UserSerializer
@@ -17,6 +17,7 @@ from users.services.student_course import (get_lesson_for_student,
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
     @action(methods=['post'],
             detail=True,
@@ -32,7 +33,8 @@ class CourseViewSet(viewsets.ModelViewSet):
             detail=False,
             permission_classes=[IsAuthenticated])
     def student_courses(self, request):
-        return Response({'student_courses': Course.objects.filter(students=self.request.user).values()},
+        serializer = self.get_serializer(Course.objects.filter(students=self.request.user), many=True)
+        return Response({'student_courses': serializer.data},
                         status=status.HTTP_200_OK)
 
 
