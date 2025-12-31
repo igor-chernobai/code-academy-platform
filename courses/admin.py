@@ -11,32 +11,32 @@ class ModuleInline(StackedInline):
 
 @admin.register(models.Course)
 class CourseAdmin(ModelAdmin):
-    list_display = ["title", "owner", "created"]
-    prepopulated_fields = {"slug": ["title"]}
+    list_display = ['title', 'owner', 'created']
+    prepopulated_fields = {'slug': ['title']}
     compressed_fields = True
-    filter_horizontal = ["students"]
+    filter_horizontal = ['students']
 
     inlines = [ModuleInline]
 
 
 @admin.register(models.Module)
 class ModuleAdmin(ModelAdmin):
-    list_display = ["course", "title", "created", "order"]
-    list_display_links = ["title"]
-    ordering = ["order"]
-    prepopulated_fields = {'slug': ["title"]}
+    list_display = ['course', 'title', 'created', 'order']
+    list_display_links = ['title']
+    ordering = ['order']
+    prepopulated_fields = {'slug': ['title']}
     compressed_fields = True
 
 
 @admin.register(models.Lesson)
 class LessonAdmin(ModelAdmin):
-    list_display = ["module", "title", "created", "order"]
-    list_display_links = ["title"]
-    ordering = ["order"]
+    list_display = ['module', 'title', 'created', 'order']
+    list_display_links = ['title']
+    ordering = ['order']
     compressed_fields = True
-    prepopulated_fields = {'slug': ["title"]}
-    search_fields = ["title"]
-    list_filter = ["module"]
+    prepopulated_fields = {'slug': ['title']}
+    search_fields = ['title']
+    list_filter = ['module']
     warn_unsaved_form = True
 
 

@@ -2,11 +2,11 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
-from subscriptions.models import SubscriptionPlan
+from subscriptions.models import Plan
 
 
 class StudentRegistrationWithPlanForm(UserCreationForm):
-    plan = forms.ModelChoiceField(queryset=SubscriptionPlan.objects.all())
+    plan = forms.ModelChoiceField(queryset=Plan.objects.all())
     first_name = forms.CharField(label="Ім'я")
 
     class Meta:

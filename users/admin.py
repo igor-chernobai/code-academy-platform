@@ -15,23 +15,23 @@ admin.site.unregister(Group)
 
 @admin.register(get_user_model())
 class UserAdmin(UserAdmin, ModelAdmin):
-    readonly_fields = ["last_login", "date_joined"]
+    readonly_fields = ['last_login', 'date_joined']
     compressed_fields = True
     fieldsets = (
 
-        (_("Personal info"), {
-            "classes": ["tab"],
-            "fields": ("email", "password", "first_name", "last_name", "last_login", "date_joined")}),
+        (_('Personal info'), {
+            'classes': ['tab'],
+            'fields': ('email', 'password', 'first_name', 'last_name', 'last_login', 'date_joined')}),
         (
-            _("Permissions"),
+            _('Permissions'),
             {
-                "classes": ["tab"],
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
+                'classes': ['tab'],
+                'fields': (
+                    'is_active',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
                 ),
             },
         ),
@@ -40,19 +40,19 @@ class UserAdmin(UserAdmin, ModelAdmin):
         (
             None,
             {
-                "classes": ("wide",),
-                "fields": ("email", "first_name", "last_name", "password", "password2"),
+                'classes': ('wide',),
+                'fields': ('email', 'first_name', 'last_name', 'password', 'password2'),
             },
         ),
     )
-    list_display = ("email", "first_name", "last_name", "is_staff")
-    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
-    search_fields = ("first_name", "last_name", "email")
+    list_display = ('email', 'first_name', 'last_name', 'is_staff')
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    search_fields = ('first_name', 'last_name', 'email')
     filter_horizontal = (
-        "groups",
-        "user_permissions",
+        'groups',
+        'user_permissions',
     )
-    ordering = ("email",)
+    ordering = ('email',)
     form = UserChangeForm
     add_form = CustomUserCreationForm
     change_password_form = AdminPasswordChangeForm
@@ -65,13 +65,13 @@ class GroupAdmin(BaseGroupAdmin, ModelAdmin):
 
 @admin.register(StudentLastActivity)
 class StudentStudentLastActivity(ModelAdmin):
-    list_display = ["student", "course", "last_lesson", "last_viewed"]
-    readonly_fields = ["last_viewed"]
-    list_display_links = ["course", "last_lesson"]
+    list_display = ['student', 'course', 'last_lesson', 'last_viewed']
+    readonly_fields = ['last_viewed']
+    list_display_links = ['course', 'last_lesson']
     compressed_fields = True
 
 
 @admin.register(StudentProgress)
 class StudentLessonProgressAdmin(ModelAdmin):
-    list_display = ["student", "lesson", "is_complete"]
-    readonly_fields = ["complete_at"]
+    list_display = ['student', 'lesson', 'is_complete']
+    readonly_fields = ['complete_at']

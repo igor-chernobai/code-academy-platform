@@ -4,7 +4,7 @@ from django.contrib.auth.base_user import BaseUserManager
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if email is None:
-            raise ValueError("Email це обов'язкове поле для заповнення")
+            raise ValueError('Email це обов\'язкове поле для заповнення')
 
         user = self.model(
             email=self.normalize_email(email), **extra_fields

@@ -15,7 +15,7 @@ class CourseEnrollForm(forms.Form):
 
 class LessonCompleteForm(forms.Form):
     lesson = forms.ModelChoiceField(
-        queryset=Lesson.objects.select_related("module__course").all(),
+        queryset=Lesson.objects.select_related('module__course').all(),
         widget=forms.HiddenInput
     )
     course = forms.ModelChoiceField(
@@ -25,18 +25,18 @@ class LessonCompleteForm(forms.Form):
 
     def clean(self):
         cd = super().clean()
-        lesson = cd.get("lesson")
-        course = cd.get("course")
+        lesson = cd.get('lesson')
+        course = cd.get('course')
 
         if lesson.module.course != course:
-            raise ValidationError("Лекція не відноситься до курсу")
+            raise ValidationError('Лекція не відноситься до курсу')
 
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
-        fields = ["email", "first_name", "last_name", "password", "password2"]
-        exclude = ["username"]
+        fields = ['email', 'first_name', 'last_name', 'password', 'password2']
+        exclude = ['username']
 
 
 class StudentProfileForm(forms.ModelForm):

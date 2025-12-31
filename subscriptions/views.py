@@ -3,16 +3,16 @@ from django.views.generic import FormView
 from rest_framework.reverse import reverse_lazy
 
 from subscriptions.forms import StudentRegistrationWithPlanForm
-from subscriptions.models import SubscriptionPlan
+from subscriptions.models import Plan
 from subscriptions.services.subscription import subscription_create
 
 
 class SubscriptionFormView(FormView):
-    template_name = "subscriptions/subscription_create.html"
+    template_name = 'subscriptions/subscription_create.html'
     form_class = StudentRegistrationWithPlanForm
-    success_url = reverse_lazy("course_list")
+    success_url = reverse_lazy('course_list')
     extra_context = {
-        "plans": SubscriptionPlan.objects.all()
+        'plans': Plan.objects.all()
     }
 
     def form_valid(self, form):
