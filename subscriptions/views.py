@@ -31,7 +31,7 @@ class SubscriptionCreateView(CreateView):
 class SubscriptionChangeFormView(LoginRequiredMixin, FormView):
     form_class = SubscriptionChangeForm
     template_name = 'subscriptions/subscription_update.html'
-    success_url = reverse_lazy('course_list')
+    success_url = reverse_lazy('students:student_course_list')
     extra_context = {
         'plans': Plan.objects.all()
     }

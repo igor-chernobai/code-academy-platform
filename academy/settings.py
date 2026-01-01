@@ -194,7 +194,7 @@ MDEDITOR_CONFIGS = {
 # Auth
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = '/users/login/'
+LOGIN_URL = '/accounts/login/'
 
 AUTHENTICATION_BACKENDS = ['users.backends.EmailAuthBackend']
 
