@@ -1,3 +1,5 @@
+from sysconfig import is_python_build
+
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
@@ -45,9 +47,10 @@ class UserAdmin(UserAdmin, ModelAdmin):
             },
         ),
     )
-    list_display = ('email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('email', 'get_full_info', 'is_staff', 'get_user_subscription')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('first_name', 'last_name', 'email')
+    list_select_related = ['subscription__plan']
     filter_horizontal = (
         'groups',
         'user_permissions',
@@ -56,6 +59,16 @@ class UserAdmin(UserAdmin, ModelAdmin):
     form = UserChangeForm
     add_form = CustomUserCreationForm
     change_password_form = AdminPasswordChangeForm
+
+    @admin.display(description='Ім`я та фамілія')
+    def get_full_info(self, obj):
+        return obj.get_full_name()
+
+
+    @admin.display(description='Підписка')
+    def get_user_subscription(self, obj):
+        status = 'Активна' if obj.subscription.is_active else 'Не активна'
+        return f'{obj.subscription.plan.name} | {status}'
 
 
 @admin.register(Group)
@@ -69,6 +82,7 @@ class StudentStudentLastActivity(ModelAdmin):
     readonly_fields = ['last_viewed']
     list_display_links = ['course', 'last_lesson']
     compressed_fields = True
+    list_filter = ['student', 'course']
 
 
 @admin.register(StudentProgress)
