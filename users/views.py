@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views import View, generic
 
 from courses.models import Course, Lesson
+from subscriptions.mixins import SubscriptionCheckMixin
 from users import forms as student_forms
 from users.forms import StudentProfileForm
 from users.models import StudentProgress
@@ -15,7 +16,7 @@ from users.services.student_course import (get_course_for_student,
                                            updated_activity)
 
 
-class StudentEnrollCourseView(LoginRequiredMixin, generic.FormView):
+class StudentEnrollCourseView(LoginRequiredMixin, SubscriptionCheckMixin, generic.FormView):
     course = None
     form_class = student_forms.CourseEnrollForm
 
@@ -31,7 +32,7 @@ class StudentEnrollCourseView(LoginRequiredMixin, generic.FormView):
         return reverse_lazy('students:student_course', args=[self.course.id])
 
 
-class StudentCourseListView(LoginRequiredMixin, generic.ListView):
+class StudentCourseListView(LoginRequiredMixin, SubscriptionCheckMixin, generic.ListView):
     model = Course
     template_name = 'users/student_courses.html'
     context_object_name = 'courses'
@@ -48,7 +49,7 @@ class StudentCourseListView(LoginRequiredMixin, generic.ListView):
         return courses
 
 
-class StudentLessonDetailView(LoginRequiredMixin, generic.DetailView):
+class StudentLessonDetailView(LoginRequiredMixin, SubscriptionCheckMixin, generic.DetailView):
     model = Lesson
     template_name = 'users/student_lesson.html'
     slug_url_kwarg = 'lesson_slug'
@@ -79,7 +80,7 @@ class StudentLessonDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class LessonCompleteView(LoginRequiredMixin, View):
+class LessonCompleteView(LoginRequiredMixin, SubscriptionCheckMixin, View):
     form_class = student_forms.LessonCompleteForm
     lesson = None
 

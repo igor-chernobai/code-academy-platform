@@ -15,6 +15,6 @@ class EmailAuthBackend(ModelBackend):
 
     def get_user(self, user_id):
         try:
-            return UserModel.objects.get(pk=user_id)
+            return UserModel.objects.select_related("subscription__plan").get(pk=user_id)
         except UserModel.DoesNotExist:
             return None

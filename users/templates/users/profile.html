@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+  <div class="flex items-center justify-center min-h-screen bg-gray-100 p-6">
 
     <div class="w-full max-w-4xl p-8 space-y-8 bg-white rounded-2xl shadow-2xl">
 
@@ -16,21 +17,28 @@
         </div>
       {% endif %}
 
+      <form method="post" enctype="multipart/form-data" class="space-y-8">
         {% csrf_token %}
 
         <div class="flex flex-col items-center space-y-4">
-            {% if user.photo %}
-              <img src="{{ user.photo.url }}" alt="{{ user.username }}"
-                   class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
-            {% else %}
-              <img src="{% static 'img/avatar.png' %}" alt="{{ user.username }}"
-                   class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
-            {% endif %}
-          <p class="text-xs text-gray-400 font-medium">Натисніть на поле вибору файлу нижче, щоб змінити фото</p>
+            <div class="relative">
+                {% if user.photo %}
+                  <img src="{{ user.photo.url }}" alt="{{ user.username }}"
+                       class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
+                {% else %}
+                  <img src="{% static 'img/avatar.png' %}" alt="{{ user.username }}"
+                       class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
+                {% endif %}
+            </div>
+            <p class="text-xs text-gray-400 font-medium tracking-wide text-center">
+                Натисніть на поле вибору файлу нижче, щоб змінити фото
+            </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {% for field in form %}
+            <div class="flex flex-col space-y-1">
+              <label for="{{ field.id_for_label }}" class="text-sm font-semibold text-gray-700">
                 {{ field.label }}
               </label>
 
@@ -45,9 +53,16 @@
           {% endfor %}
         </div>
 
+        <div class="flex justify-start px-1">
+            <a href="{% url 'password_change' %}" class="text-sm font-medium text-[#539db8] hover:text-[#ff9d32] transition-colors duration-200 underline decoration-dotted underline-offset-4">
+                Змінити пароль
+            </a>
+        </div>
+
         <div class="pt-6 border-t border-gray-100">
           <div class="flex justify-start">
             <button type="submit"
+                    class="px-6 py-3 bg-[#539db8] text-white font-semibold rounded-lg hover:bg-[#ff9d32] transition-colors duration-300 shadow-sm hover:shadow-md">
               Зберегти зміни
             </button>
           </div>

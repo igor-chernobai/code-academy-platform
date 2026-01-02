@@ -1,5 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 from django.views.generic import CreateView, FormView
 from rest_framework.reverse import reverse_lazy
 
@@ -15,7 +17,7 @@ class SubscriptionCreateView(CreateView):
     form_class = StudentRegistrationWithPlanForm
     success_url = reverse_lazy('course_list')
     extra_context = {
-        'plans': Plan.objects.all()
+        'plans': cache.get_or_set("plans", Plan.objects.all(), 60 * 5)
     }
 
     def form_valid(self, form):
@@ -31,12 +33,15 @@ class SubscriptionCreateView(CreateView):
 class SubscriptionChangeFormView(LoginRequiredMixin, FormView):
     form_class = SubscriptionChangeForm
     template_name = 'subscriptions/subscription_update.html'
-    success_url = reverse_lazy('course_list')
+    success_url = reverse_lazy('students:student_course_list')
     extra_context = {
         'plans': Plan.objects.all()
     }
 
+
     def form_valid(self, form):
         plan = form.cleaned_data['plan']
         subscription_update(self.request.user, plan)
+        key = make_template_fragment_key('user_plans', [self.request.user.email])
+        cache.delete(key)
         return super().form_valid(form)

@@ -10,6 +10,7 @@ class Plan(models.Model):
     duration_days = models.PositiveIntegerField('інтервал плану')
 
     class Meta:
+        db_table = 'plans'
         verbose_name = 'план'
         verbose_name_plural = 'плани'
 
@@ -43,6 +44,7 @@ class Subscription(SubscriptionCommonInfo):
                                    verbose_name='студент')
 
     class Meta:
+        db_table = 'subscriptions'
         verbose_name = 'підписка'
         verbose_name_plural = 'підписки'
 
@@ -53,5 +55,6 @@ class SubscriptionHistory(SubscriptionCommonInfo):
                                 verbose_name='студент')
 
     class Meta:
+        db_table = 'subscription_histories'
         verbose_name = 'історія підписки'
         verbose_name_plural = 'історія підписки'
