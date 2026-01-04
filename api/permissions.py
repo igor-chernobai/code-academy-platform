@@ -12,3 +12,8 @@ class IsAdminOrReadOnly(BasePermission):
             return True
 
         return request.user.is_staff
+
+
+class HasActiveSubscription(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.subscription.is_active

@@ -6,7 +6,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-from api.permissions import IsAdminOrReadOnly, IsEnrolled
+from api.permissions import IsAdminOrReadOnly, IsEnrolled, HasActiveSubscription
 from courses.models import Course, Lesson
 from courses.serializers import CourseSerializer, LessonSerializer
 from users.serializers import UserSerializer
@@ -21,7 +21,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'],
             detail=True,
-            permission_classes=[IsAuthenticated])
+            permission_classes=[IsAuthenticated, HasActiveSubscription])
     def enroll(self, request, *args, **kwargs):
         course = self.get_object()
         course.students.add(request.user)
@@ -31,7 +31,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'],
             detail=False,
-            permission_classes=[IsAuthenticated])
+            permission_classes=[IsAuthenticated, HasActiveSubscription])
     def student_courses(self, request):
         serializer = self.get_serializer(Course.objects.filter(students=self.request.user), many=True)
         return Response({'student_courses': serializer.data},
@@ -41,7 +41,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsEnrolled]
+    permission_classes = [IsAuthenticated, HasActiveSubscription, IsEnrolled]
 
     def get_object(self):
         course_id = self.kwargs.get('course_id')
