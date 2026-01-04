@@ -38,7 +38,6 @@ class SubscriptionChangeFormView(LoginRequiredMixin, FormView):
         'plans': Plan.objects.all()
     }
 
-
     def form_valid(self, form):
         plan = form.cleaned_data['plan']
         subscription_update(self.request.user, plan)

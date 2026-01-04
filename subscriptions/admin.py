@@ -1,5 +1,5 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
+from unfold.admin import ModelAdmin, StackedInline, TabularInline
 
 from subscriptions.models import Plan, Subscription, SubscriptionHistory
 
@@ -27,7 +27,7 @@ class SubscriptionAdmin(ModelAdmin):
 
 
 @admin.register(SubscriptionHistory)
-class SubscriptionHistory(ModelAdmin):
+class SubscriptionHistoryAdmin(ModelAdmin):
     list_display = ['student', 'plan', 'start_date', 'end_date', 'get_status']
     list_display_links = ['student', 'plan']
     readonly_fields = ['start_date']
@@ -39,3 +39,16 @@ class SubscriptionHistory(ModelAdmin):
     @admin.display(description='Активна?', boolean=True)
     def get_status(self, obj):
         return obj.is_active
+
+
+class SubscriptionTabular(StackedInline):
+    model = Subscription
+    readonly_fields = ['start_date']
+    tab = True
+
+
+class SubscriptionHistoryTabular(TabularInline):
+    model = SubscriptionHistory
+    tab = True
+    readonly_fields = ['end_date']
+    extra = 0

@@ -6,7 +6,8 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-from api.permissions import IsAdminOrReadOnly, IsEnrolled, HasActiveSubscription
+from api.permissions import (HasActiveSubscription, IsAdminOrReadOnly,
+                             IsEnrolled)
 from courses.models import Course, Lesson
 from courses.serializers import CourseSerializer, LessonSerializer
 from users.serializers import UserSerializer

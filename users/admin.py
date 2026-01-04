@@ -1,5 +1,3 @@
-from sysconfig import is_python_build
-
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
@@ -9,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm
 
+from subscriptions.admin import SubscriptionHistoryTabular, SubscriptionTabular
 from users.forms import CustomUserCreationForm
 from users.models import StudentLastActivity, StudentProgress
 
@@ -60,10 +59,11 @@ class UserAdmin(UserAdmin, ModelAdmin):
     add_form = CustomUserCreationForm
     change_password_form = AdminPasswordChangeForm
 
+    inlines = [SubscriptionTabular, SubscriptionHistoryTabular]
+
     @admin.display(description='Ім`я та фамілія')
     def get_full_info(self, obj):
         return obj.get_full_name()
-
 
     @admin.display(description='Підписка')
     def get_user_subscription(self, obj):
