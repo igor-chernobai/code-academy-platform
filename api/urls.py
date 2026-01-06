@@ -10,6 +10,7 @@ app_name = 'api'
 router = DefaultRouter()
 router.register(r'courses', views.CourseViewSet)
 router.register(r'users', views.UserViewSet)
+# router.register(r'subscriptions', views.SubscriptionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -19,5 +20,7 @@ urlpatterns = [
     path('token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
-    path('token/blacklist/', jwt_views.TokenBlacklistView.as_view())
+    path('token/blacklist/', jwt_views.TokenBlacklistView.as_view()),
+    path('subscription/', views.SubscriptionDetail.as_view()),
+    path('subscriptions/', views.SubscriptionDetail.as_view())
 ]

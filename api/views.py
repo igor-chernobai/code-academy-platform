@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
@@ -10,6 +11,9 @@ from api.permissions import (HasActiveSubscription, IsAdminOrReadOnly,
                              IsEnrolled)
 from courses.models import Course, Lesson
 from courses.serializers import CourseSerializer, LessonSerializer
+from subscriptions.models import Plan, Subscription
+from subscriptions.serializers import SubscriptionSerializer
+from subscriptions.services.subscription import subscription_update
 from users.serializers import UserSerializer
 from users.services.student_course import (get_lesson_for_student,
                                            updated_activity)
@@ -66,3 +70,24 @@ class UserViewSet(viewsets.ModelViewSet):
     filterset_fields = ['is_staff', 'is_active']
     ordering_fields = ['id', 'email', 'date_joined']
     search_fields = ['email', 'first_name', 'last_name']
+
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+
+class SubscriptionDetail(generics.RetrieveUpdateAPIView):
+    serializer_class = SubscriptionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.subscription
+
+    def update(self, request, *args, **kwargs):
+        plan_id = request.data['plan']
+        plan = get_object_or_404(Plan, id=plan_id)
+
+        subscription = subscription_update(request.user, plan)
+        serializer = self.get_serializer(subscription)
+        return Response(serializer.data, status=status.HTTP_200_OK)
