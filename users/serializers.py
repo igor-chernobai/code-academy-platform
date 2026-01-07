@@ -7,19 +7,15 @@ from subscriptions.services.subscription import subscription_create
 UserModel = get_user_model()
 
 
-class UserShortSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ['id', 'email', 'get_full_name']
-
-
 class UserListCreateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     user_permissions = serializers.StringRelatedField(read_only=True, many=True)
-    password1 = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True)
+    password1 = serializers.CharField(write_only=True, label='Пароль')
+    password2 = serializers.CharField(write_only=True, label='Повторіть пароль')
     date_joined = serializers.DateTimeField(format='%d.%m.%Y %H:%M', read_only=True)
-    plan = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Plan.objects.all())
+    plan = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Plan.objects.all(), label='План')
+    is_staff = serializers.ReadOnlyField()
+    is_active = serializers.ReadOnlyField()
 
     class Meta:
         model = UserModel
