@@ -9,16 +9,22 @@ app_name = 'api'
 
 router = DefaultRouter()
 router.register(r'courses', views.CourseViewSet)
-router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
     path('course/<int:course_id>/lesson/<slug:slug>/', views.StudentLessonRetrieveAPIView.as_view()),
     path('course/<int:course_id>/', views.StudentLessonRetrieveAPIView.as_view()),
+
+    # Auth
     path('auth-token/', obtain_auth_token),
     path('token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
     path('token/blacklist/', jwt_views.TokenBlacklistView.as_view()),
+
+    # Users
     path('subscription/', views.SubscriptionDetail.as_view()),
+    path('users/', views.UserList.as_view()),
+    path('users/create/', views.UserCreate.as_view()),
+    path('users/update/', views.UserDetail.as_view())
 ]

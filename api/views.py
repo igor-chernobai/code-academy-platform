@@ -11,7 +11,7 @@ from api.permissions import (HasActiveSubscription, IsAdminOrReadOnly,
 from courses.models import Course, Lesson
 from courses.serializers import CourseSerializer, LessonSerializer
 from subscriptions.serializers import SubscriptionSerializer
-from users.serializers import UserSerializer
+from users.serializers import UserListCreateSerializer, UserUpdateSerializer
 from users.services.student_course import (get_lesson_for_student,
                                            updated_activity)
 
@@ -59,14 +59,27 @@ class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
         return lesson
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
+class UserList(generics.ListAPIView):
     queryset = get_user_model().objects.all()
+    serializer_class = UserListCreateSerializer
     permission_classes = [IsAdminUser]
-    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['is_staff', 'is_active']
-    ordering_fields = ['id', 'email', 'date_joined']
-    search_fields = ['email', 'first_name', 'last_name']
+    search_fields = ['id', 'email', 'first_name', 'last_name']
+    ordering_fields = ['id', 'date_joined']
+
+
+class UserCreate(generics.CreateAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserListCreateSerializer
+
+
+class UserDetail(generics.RetrieveUpdateAPIView):
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated, HasActiveSubscription]
+
+    def get_object(self):
+        return self.request.user
 
 
 class SubscriptionDetail(generics.RetrieveUpdateAPIView):
