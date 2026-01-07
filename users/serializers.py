@@ -7,6 +7,12 @@ from subscriptions.services.subscription import subscription_create
 UserModel = get_user_model()
 
 
+class UserShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ['id', 'email', 'get_full_name']
+
+
 class UserListCreateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     user_permissions = serializers.StringRelatedField(read_only=True, many=True)
