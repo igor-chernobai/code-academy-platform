@@ -16,9 +16,6 @@ class SubscriptionCreateView(CreateView):
     template_name = 'subscriptions/subscription_create.html'
     form_class = StudentRegistrationWithPlanForm
     success_url = reverse_lazy('course_list')
-    extra_context = {
-        'plans': cache.get_or_set("plans", Plan.objects.all(), 60 * 5)
-    }
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -29,14 +26,16 @@ class SubscriptionCreateView(CreateView):
 
         return response
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Кэш и запрос теперь будут срабатывать только при открытии страницы
+        context['plans'] = cache.get_or_set("plans", Plan.objects.all(), 60 * 5)
+        return context
 
 class SubscriptionChangeFormView(LoginRequiredMixin, FormView):
     form_class = SubscriptionChangeForm
     template_name = 'subscriptions/subscription_update.html'
     success_url = reverse_lazy('students:student_course_list')
-    extra_context = {
-        'plans': Plan.objects.all()
-    }
 
     def form_valid(self, form):
         plan = form.cleaned_data['plan']
@@ -44,3 +43,9 @@ class SubscriptionChangeFormView(LoginRequiredMixin, FormView):
         key = make_template_fragment_key('user_plans', [self.request.user.email])
         cache.delete(key)
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Кэш и запрос теперь будут срабатывать только при открытии страницы
+        context['plans'] = cache.get_or_set("plans", Plan.objects.all(), 60 * 5)
+        return context
