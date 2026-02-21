@@ -7,10 +7,11 @@ __pycache__/
 *.pyt
 
 # Virtual environment
+.venv/
 venv/
 env/
 ENV/
-.env/
+.env*
 
 # Django
 *.sqlite3

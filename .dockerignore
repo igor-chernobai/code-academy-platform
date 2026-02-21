@@ -2,4 +2,4 @@ pg_data/
 cache/
 *.pyc
 __pycache__/
-.env
+.env*
