@@ -37,7 +37,7 @@ yarn.lock
 
 # Tailwind / build output
 dist/
-static/src/output.css
+static/output.css
 staticfiles/
 
 # IDEs

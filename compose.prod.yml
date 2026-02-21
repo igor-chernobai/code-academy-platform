@@ -16,6 +16,17 @@ services:
       db:
         condition: service_healthy
 
+  nginx:
+    build: ./nginx
+    image: nginx_prod:1.0.0
+    volumes:
+      - static_volume:/static
+      - media_volume:/media
+    ports:
+      - 80:80
+    depends_on:
+      - web
+
   db:
     image: postgres:16-bookworm
     env_file:
