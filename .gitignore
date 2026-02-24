@@ -7,10 +7,13 @@ __pycache__/
 *.pyt
 
 # Virtual environment
+.venv/
 venv/
 env/
 ENV/
-.env/
+.env.dev
+.env.prod
+
 
 # Django
 *.sqlite3
@@ -34,10 +37,8 @@ package-lock.json
 pnpm-lock.yaml
 yarn.lock
 
-# Tailwind / build output
+# Tailwind
 dist/
-static/src/output.css
-staticfiles/
 
 # IDEs
 .vscode/
@@ -53,3 +54,6 @@ Thumbs.db
 
 # Cache
 cache/
+
+# AWS
+my-aws-key-ed.pem

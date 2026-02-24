@@ -1,0 +1,20 @@
+FROM python:3.13-slim
+
+RUN useradd -s /bin/sh -u 1000 nonroot
+
+WORKDIR /usr/src/app
+
+COPY requirements.txt .
+
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
+
+COPY . .
+
+RUN chmod +x ./entrypoint.prod.sh
+
+RUN chown -R nonroot:nonroot /usr/src/app
+
+USER nonroot
+
+ENTRYPOINT ["./entrypoint.prod.sh"]

@@ -1,0 +1,46 @@
+/* static/src/input.css */
+
+@import "../node_modules/tailwindcss/dist/lib.d.mts";
+
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --color-primary-dark: #19183B;
+    --color-accent: #ff9d32;
+}
+
+@layer components {
+    input {
+        width: 100%;
+        background-color: var(--color-gray-50);
+        border-width: 1px;
+        border-color: var(--color-gray-200);
+        color: var(--color-primary-dark);
+        padding-inline: --spacing(4); /* px-4 */
+        padding-block: --spacing(3); /* py-3 */
+        border-radius: var(--radius-xl);;
+        outline-style: none;
+        transition-property: all;
+        transition-duration: 150ms;
+
+        &::placeholder {
+            color: var(--color-gray-400);
+        }
+
+        &:focus {
+            background-color: var(--color-white);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent), transparent 90%);
+        }
+    }
+
+    label {
+        display: block;
+        margin-bottom: --spacing(2);
+        font-size: var(--text-xs);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary-dark);
+        text-transform: uppercase;
+        letter-spacing: var(--tracking-wide);
+    }
+}
