@@ -56,4 +56,4 @@ Thumbs.db
 cache/
 
 # AWS
-my-aws-key-ed.pem
+my-aws-key.pem
