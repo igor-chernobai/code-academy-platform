@@ -2,75 +2,80 @@
 {% load static %}
 
 {% block content %}
-  <div class="flex items-center justify-center min-h-screen bg-gray-100 p-6">
+<div class="flex justify-center py-16 px-4">
 
-    <div class="w-full max-w-4xl p-8 space-y-8 bg-white rounded-2xl shadow-2xl">
+  <div class="card w-full max-w-4xl space-y-8">
 
-      <div class="text-center">
-        <h2 class="text-2xl font-bold text-gray-800">Налаштування профілю</h2>
-        <p class="text-sm text-gray-500">Оновіть інформацію вашого облікового запису</p>
-      </div>
-
-      {% if form.non_field_errors %}
-        <div class="p-4 text-sm text-red-700 bg-red-100 border border-red-200 rounded-lg">
-          {{ form.non_field_errors }}
-        </div>
-      {% endif %}
-
-      <form method="post" enctype="multipart/form-data" class="space-y-8">
-        {% csrf_token %}
-
-        <div class="flex flex-col items-center space-y-4">
-            <div class="relative">
-                {% if user.photo %}
-                  <img src="{{ user.photo.url }}" alt="{{ user.username }}"
-                       class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
-                {% else %}
-                  <img src="{% static 'img/avatar.png' %}" alt="{{ user.username }}"
-                       class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
-                {% endif %}
-            </div>
-            <p class="text-xs text-gray-400 font-medium tracking-wide text-center">
-                Натисніть на поле вибору файлу нижче, щоб змінити фото
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {% for field in form %}
-            <div class="flex flex-col space-y-1">
-              <label for="{{ field.id_for_label }}" class="text-sm font-semibold text-gray-700">
-                {{ field.label }}
-              </label>
-
-              {{ field }}
-
-              {% if field.errors %}
-                <p class="mt-1 text-xs text-red-600 font-medium">
-                  {{ field.errors|striptags }}
-                </p>
-              {% endif %}
-            </div>
-          {% endfor %}
-        </div>
-
-        <div class="flex justify-start px-1">
-            <a href="{% url 'password_change' %}" class="text-sm font-medium text-[#539db8] hover:text-[#ff9d32] transition-colors duration-200 underline decoration-dotted underline-offset-4">
-                Змінити пароль
-            </a>
-        </div>
-
-        <div class="pt-6 border-t border-gray-100">
-          <div class="flex justify-start">
-            <button type="submit"
-                    class="px-6 py-3 bg-[#539db8] text-white font-semibold rounded-lg hover:bg-[#ff9d32] transition-colors duration-300 shadow-sm hover:shadow-md">
-              Зберегти зміни
-            </button>
-          </div>
-        </div>
-
-      </form>
-
+    <!-- Header -->
+    <div class="text-center space-y-1">
+      <h2 class="text-2xl font-bold text-[var(--color-primary-dark)]">
+        Налаштування профілю
+      </h2>
+      <p class="text-sm text-gray-500">
+        Оновіть інформацію вашого облікового запису
+      </p>
     </div>
 
+    {% if form.non_field_errors %}
+      <div class="p-4 text-sm text-red-700 bg-red-100 border border-red-200 rounded-xl">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="space-y-8">
+      {% csrf_token %}
+
+      <!-- Avatar -->
+      <div class="flex flex-col items-center space-y-4">
+        <div>
+          {% if user.photo %}
+            <img src="{{ user.photo.url }}"
+                 alt="{{ user.username }}"
+                 class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
+          {% else %}
+            <img src="{% static 'img/avatar.png' %}"
+                 alt="{{ user.username }}"
+                 class="w-32 h-32 rounded-full object-cover border-4 border-gray-50 shadow-md">
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Fields -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for field in form %}
+          <div>
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% if field.errors %}
+              <p class="mt-1 text-sm text-red-500">
+                {{ field.errors|striptags }}
+              </p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Password link -->
+      <div>
+        <a href="{% url 'password_change' %}" class="link text-sm">
+          Змінити пароль
+        </a>
+      </div>
+
+      <!-- Submit -->
+      <div class="pt-6 border-t border-gray-100">
+        <button type="submit" class="btn btn-primary">
+          Зберегти зміни
+        </button>
+      </div>
+
+    </form>
+
   </div>
+
+</div>
 {% endblock %}

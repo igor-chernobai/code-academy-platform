@@ -1,45 +1,59 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-xl">
-      <h2 class="text-2xl font-bold text-center text-gray-800">Увійти</h2>
+  <div class="flex justify-center py-16">
+
+    <div class="card w-full max-w-md">
+
+      <h2 class="text-2xl font-bold text-center text-primary-dark">
+        Увійти
+      </h2>
+
       {% if form.non_field_errors %}
-        <div class="p-4 text-sm text-red-700 bg-red-100 border border-red-300 rounded-lg" role="alert">
+        <div class="p-4 text-sm text-red-700 bg-red-100 border border-red-300 rounded-xl">
           {{ form.non_field_errors }}
         </div>
       {% endif %}
-      <form action="{% url 'login' %}" method="post" class="space-y-4">
-        {% csrf_token %}
 
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
+
         {% for field in form %}
           <div>
-            <label for="{{ field.id_for_label }}"
-                   class="label">{{ field.label }}</label>
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}
+            </label>
+
             {{ field }}
+
             {% if field.errors %}
-              <p class="mt-1 text-sm text-red-500">{{ field.errors|striptags }}</p>
+              <p class="mt-1 text-sm text-red-500">
+                {{ field.errors|striptags }}
+              </p>
             {% endif %}
           </div>
         {% endfor %}
 
-        <button type="submit"
-                class="w-full py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
+        <button type="submit" class="btn btn-primary w-full">
           Увійти
         </button>
 
-        <p class="mt-4 text-sm text-center text-gray-600">
-          Ще немає акаунта?
-          <a href="{% url 'subscriptions:subscription_create' %}"
-             class="text-blue-600 hover:underline">Зареєструватися</a>
-        </p>
+        <div class="text-center space-y-2 text-sm text-gray-600">
+          <p>
+            Ще немає акаунта?
+            <a href="{% url 'subscriptions:subscription_create' %}" class="link">
+              Зареєструватися
+            </a>
+          </p>
 
-        <p class="mt-4 text-sm text-center text-gray-600">
-          Забули пароль?
-          <a href="{% url 'password_reset' %}"
-             class="text-blue-600 hover:underline">Сбросить пароль</a>
-        </p>
+          <p>
+            Забули пароль?
+            <a href="{% url 'password_reset' %}" class="link">
+              Скинути пароль
+            </a>
+          </p>
+        </div>
       </form>
     </div>
   </div>
