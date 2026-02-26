@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.db import models
 from unfold.admin import ModelAdmin, StackedInline, TabularInline
+from unfold.contrib.forms.widgets import WysiwygWidget
 
 from subscriptions.models import Plan, Subscription, SubscriptionHistory
 
@@ -10,6 +12,11 @@ class PlanAdmin(ModelAdmin):
     list_display_links = ['name', 'price']
     list_editable = ['duration_days']
     compressed_fields = True
+    formfield_overrides = {
+        models.TextField: {
+            "widget": WysiwygWidget,
+        }
+    }
 
 
 @admin.register(Subscription)

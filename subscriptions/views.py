@@ -28,9 +28,10 @@ class SubscriptionCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Кэш и запрос теперь будут срабатывать только при открытии страницы
+
         context['plans'] = cache.get_or_set("plans", Plan.objects.all(), 60 * 5)
         return context
+
 
 class SubscriptionChangeFormView(LoginRequiredMixin, FormView):
     form_class = SubscriptionChangeForm
@@ -46,6 +47,5 @@ class SubscriptionChangeFormView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Кэш и запрос теперь будут срабатывать только при открытии страницы
         context['plans'] = cache.get_or_set("plans", Plan.objects.all(), 60 * 5)
         return context
