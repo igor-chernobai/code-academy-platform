@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from courses.views import CourseListView
+from courses.views import AboutTemplateView, CourseListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +30,9 @@ urlpatterns = [
     path('students/', include('users.urls', namespace='students')),
     path('subscriptions/', include('subscriptions.urls')),
     path('api/', include('api.urls')),
-    path('', CourseListView.as_view(), name='course_list')
+    path('', CourseListView.as_view(), name='course_list'),
+    path('about/', AboutTemplateView.as_view(), name='about')
+
 ]
 
 

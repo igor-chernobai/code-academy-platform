@@ -1,46 +1,98 @@
-/* static/src/input.css */
-
-@import "../node_modules/tailwindcss/dist/lib.d.mts";
-
+@import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+/* =========================
+   THEME TOKENS
+========================= */
 
 @theme {
     --color-primary-dark: #19183B;
     --color-accent: #ff9d32;
+    --color-secondary: #539db8;
 }
 
+/* =========================
+   COMPONENT SYSTEM
+========================= */
+
 @layer components {
-    input {
-        width: 100%;
-        background-color: var(--color-gray-50);
-        border-width: 1px;
-        border-color: var(--color-gray-200);
-        color: var(--color-primary-dark);
-        padding-inline: --spacing(4); /* px-4 */
-        padding-block: --spacing(3); /* py-3 */
-        border-radius: var(--radius-xl);;
-        outline-style: none;
-        transition-property: all;
-        transition-duration: 150ms;
 
-        &::placeholder {
-            color: var(--color-gray-400);
-        }
+    /* ---------- INPUTS ---------- */
 
-        &:focus {
-            background-color: var(--color-white);
-            border-color: var(--color-accent);
-            box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent), transparent 90%);
-        }
+    input,
+    textarea,
+    select {
+        @apply w-full
+        bg-gray-50
+        border
+        border-gray-200
+        text-[var(--color-primary-dark)]
+        px-4 py-3
+        rounded-xl
+        outline-none
+        transition-all
+        duration-200;
     }
 
+    input::placeholder {
+        @apply text-gray-400;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        @apply bg-white border-[var(--color-accent)] ring-4;
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent), transparent 85%);
+    }
+
+    /* ---------- LABELS ---------- */
+
     label {
-        display: block;
-        margin-bottom: --spacing(2);
-        font-size: var(--text-xs);
-        font-weight: var(--font-weight-bold);
+        @apply block mb-2 text-xs font-bold uppercase tracking-wide;
         color: var(--color-primary-dark);
-        text-transform: uppercase;
-        letter-spacing: var(--tracking-wide);
+    }
+
+    /* ---------- BUTTON SYSTEM ---------- */
+
+    .btn {
+        @apply inline-flex items-center justify-center
+        px-5 py-2.5
+        font-semibold
+        text-white
+        rounded-lg
+        transition-all duration-200
+        shadow-sm
+        hover:shadow-md
+        cursor-pointer;
+    }
+
+    .btn-primary {
+        @apply bg-[var(--color-secondary)]
+        hover:bg-[var(--color-accent)]
+        active:translate-y-0;
+    }
+
+    .btn-outline {
+        @apply border border-[var(--color-secondary)]
+        text-[var(--color-secondary)]
+        hover:bg-[var(--color-secondary)]
+        hover:text-white;
+    }
+
+    .btn-danger {
+        @apply bg-red-600 hover:bg-red-700;
+    }
+
+    /* ---------- CARD ---------- */
+
+    .card {
+        @apply bg-white rounded-2xl shadow-xl p-8 space-y-6;
+    }
+
+    /* ---------- LINKS ---------- */
+
+    .link {
+        @apply font-semibold hover:underline;
+        color: var(--color-accent);
     }
 }

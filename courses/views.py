@@ -22,6 +22,10 @@ class CourseListView(generic.ListView):
         return courses
 
 
+class AboutTemplateView(generic.TemplateView):
+    template_name = 'about.html'
+
+
 class CourseDetailView(generic.DetailView):
     template_name = 'courses/course_detail.html'
 

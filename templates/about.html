@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+  <section class="mx-auto max-w-4xl">
+    <div class="space-y-10">
+      <!-- Header -->
+      <header class="space-y-3">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          Про нас
+        </h1>
+        <p class="text-base text-gray-600 sm:text-lg">
+          Платформа для структурованого онлайн-навчання з автоматичним керуванням доступом до курсів
+          залежно від обраного тарифного плану.
+        </p>
+      </header>
+
+      <!-- About -->
+      <div class="rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
+        <h2 class="text-xl font-semibold text-gray-900">Про платформу</h2>
+        <div class="mt-4 space-y-4 text-gray-700 leading-relaxed">
+          <p>
+            Наша платформа створена для того, щоб зробити онлайн-навчання простим, структурованим і доступним.
+            Тут користувачі можуть переглядати освітні курси та отримувати доступ до навчальних матеріалів
+            відповідно до обраного тарифного плану.
+          </p>
+          <p>
+            Основна мета — спростити управління навчальним контентом і доступом користувачів завдяки автоматизації.
+            Замість ручного адміністрування система самостійно керує доступом до курсів, щоб користувачі могли
+            зосередитися на навчанні.
+          </p>
+        </div>
+      </div>
+
+      <!-- Offer + Mission -->
+      <div class="grid gap-6 lg:grid-cols-2">
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
+          <h2 class="text-xl font-semibold text-gray-900">Що ми пропонуємо</h2>
+          <ul class="mt-4 space-y-3 text-gray-700">
+            <li class="flex gap-3">
+              <span
+                  class="mt-1 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-gray-900 text-white text-xs">
+                ✓
+              </span>
+              <span>Структуровані онлайн-курси в одному середовищі</span>
+            </li>
+            <li class="flex gap-3">
+              <span
+                  class="mt-1 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-gray-900 text-white text-xs">
+                ✓
+              </span>
+              <span>Безпечну систему авторизації та персоналізований доступ</span>
+            </li>
+            <li class="flex gap-3">
+              <span
+                  class="mt-1 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-gray-900 text-white text-xs">
+                ✓
+              </span>
+              <span>Доступ до контенту відповідно до тарифного плану</span>
+            </li>
+            <li class="flex gap-3">
+              <span
+                  class="mt-1 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-gray-900 text-white text-xs">
+                ✓
+              </span>
+              <span>Зрозумілий навчальний процес та зручну навігацію</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
+          <h2 class="text-xl font-semibold text-gray-900">Наша місія</h2>
+          <p class="mt-4 text-gray-700 leading-relaxed">
+            Ми віримо, що освіта повинна бути доступною, а керування навчальними матеріалами — простим та ефективним.
+            Платформа створена як крок до побудови масштабованих і зручних освітніх систем для студентів і авторів
+            курсів.
+          </p>
+
+          <div class="mt-6 rounded-xl bg-gray-50 p-4">
+            <p class="text-sm font-medium text-gray-900">Фокус продукту</p>
+            <p class="mt-1 text-sm text-gray-700">
+              Автоматичне керування доступом до курсів через систему планів (subscription-based access control).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tech Stack -->
+      <div class="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
+        <h2 class="text-xl font-semibold text-gray-900">Технології</h2>
+        <p class="mt-4 text-gray-700 leading-relaxed">
+          Платформа побудована на сучасній backend-архітектурі з використанням:
+        </p>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-800">Python</span>
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-800">Django</span>
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-800">Django REST Framework</span>
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-800">PostgreSQL</span>
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-800">Docker</span>
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-800">Nginx</span>
+          <span class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-800">Linux</span>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="rounded-2xl border border-gray-200 bg-white p-6 sm:p-8">
+        <h2 class="text-xl font-semibold text-gray-900">Контакти</h2>
+        <p class="mt-4 text-gray-700 leading-relaxed">
+          Якщо у вас є питання або пропозиції — будемо раді зворотному зв’язку.
+        </p>
+
+        <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <a
+              href="mailto:chernobay.i2112@gmail.com"
+              class="inline-flex items-center justify-center rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+          >
+            Написати на email
+          </a>
+
+          <p class="text-sm text-gray-600">
+            Email:
+            <a class="font-medium text-gray-900 hover:underline" href="mailto:chernobay.i2112@gmail.com">
+              chernobay.i2112@gmail.com
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
