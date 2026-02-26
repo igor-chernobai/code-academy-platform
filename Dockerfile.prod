@@ -1,3 +1,14 @@
+FROM node:20-slim AS builder
+WORKDIR /usr/src/app
+
+COPY package*.json .
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+
 FROM python:3.13-slim
 
 RUN useradd -s /bin/sh -u 1000 nonroot
@@ -11,6 +22,7 @@ RUN pip install --upgrade pip && \
 
 COPY . .
 
+COPY --from=builder /usr/src/app/static/output.css /usr/src/app/static/
 RUN chmod +x ./entrypoint.prod.sh
 
 RUN chown -R nonroot:nonroot /usr/src/app
