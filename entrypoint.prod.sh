@@ -1,5 +1,8 @@
 #!/bin/sh
 
+mkdir -p /usr/src/app/media
+chown -R nonroot:nonroot /usr/src/app/media
+
 python manage.py makemigrations
 python manage.py migrate
 
