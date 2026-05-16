@@ -16,4 +16,10 @@ class IsAdminOrReadOnly(BasePermission):
 
 class HasActiveSubscription(BasePermission):
     def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+
+        if not hasattr(request.user, 'subscription'):
+            return False
+
         return request.user.subscription.is_active
