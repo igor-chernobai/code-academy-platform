@@ -30,7 +30,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 DEBUG = getenv('DEBUG', False)
 
 if getenv('ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = getenv('ALLOWED_HOSTS').split()
+    ALLOWED_HOSTS = getenv('ALLOWED_HOSTS').split(',')
 else:
     ALLOWED_HOSTS = ['*']
 
@@ -276,11 +276,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10
 }
 
 SIMPLE_JWT = {
