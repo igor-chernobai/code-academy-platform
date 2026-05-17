@@ -17,7 +17,6 @@ from users.services.student_course import (get_lesson_for_student,
 
 class CourseViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Course.objects.all()
-    permission_classes = [IsAdminOrReadOnly]
 
     def get_serializer_class(self):
         if self.action == 'list':

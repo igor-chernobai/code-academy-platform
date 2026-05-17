@@ -42,3 +42,12 @@ def test_user_without_subscription_cannot_enroll_to_course(auth_client, course, 
 
     assert response.status_code == 403
     assert not course.students.filter(id=user.id).exists()
+
+
+def test_user_with_subscription_can_enroll_to_course(auth_client_with_active_subscription, course, user):
+    response = auth_client_with_active_subscription.post(f'/api/courses/{course.id}/enroll/')
+
+    assert response.status_code == 201
+    assert course.students.filter(id=user.id).exists()
+    assert response.data['course'] == course.title
+    assert response.data['enroll'] is True
