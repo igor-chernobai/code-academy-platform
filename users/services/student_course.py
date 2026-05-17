@@ -3,7 +3,7 @@ from django.core.cache import cache
 from django.shortcuts import get_object_or_404
 
 from courses.models import Course, Lesson
-from users.models import StudentLastActivity
+from users.models import StudentProgress
 
 User = get_user_model()
 
@@ -24,27 +24,20 @@ def get_course_for_student(student: User, course_id: int) -> Course:
     return course
 
 
-def get_lesson_for_student(student: User, course_id: int, lesson_slug: str = None) -> Lesson:
-    lesson_key = f"lesson_{student.id}_{course_id}_{lesson_slug or 'last'}"
-
-    lesson = cache.get(lesson_key)
-    if lesson is None:
-        if lesson_slug:
-            lesson = get_object_or_404(Lesson.objects.select_related("module__course"),
-                                       slug=lesson_slug,
-                                       module__course_id=course_id)
-        else:
-            try:
-                lesson = StudentLastActivity.objects.get(student=student, course_id=course_id).last_lesson
-            except StudentLastActivity.DoesNotExist:
-                lesson = Lesson.objects.select_related("module__course").filter(module__course_id=course_id).first()
-
-    cache.set(lesson_key, lesson, 300)
-
+def get_lesson_by_slug(course_id: int, lesson_slug: str):
+    lesson = get_object_or_404(Lesson.objects.select_related('module__course'), slug=lesson_slug,
+                               module__course_id=course_id)
     return lesson
 
 
-def updated_activity(student: User, course_id: int, last_lesson_id: int):
-    StudentLastActivity.objects.update_or_create(student=student,
-                                                 course_id=course_id,
-                                                 defaults={"last_lesson_id": last_lesson_id})
+def get_first_uncompleted_lesson(student: User, course_id: int):
+    lessons_id = (StudentProgress.objects
+                  .select_related('lesson__module__course_id')
+                  .filter(student=student,
+                          is_complete=True,
+                          lesson__module__course_id=course_id).values_list('lesson_id', flat=True))
+
+    lessons = Lesson.objects.filter(module__course_id=course_id).exclude(id__in=lessons_id).order_by('module__order',
+                                                                                                     'order')
+
+    return lessons.first()

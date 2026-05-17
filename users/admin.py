@@ -9,7 +9,7 @@ from unfold.forms import AdminPasswordChangeForm, UserChangeForm
 
 from subscriptions.admin import SubscriptionHistoryTabular, SubscriptionTabular
 from users.forms import CustomUserCreationForm
-from users.models import StudentLastActivity, StudentProgress
+from users.models import StudentProgress
 
 admin.site.unregister(Group)
 
@@ -74,15 +74,6 @@ class UserAdmin(UserAdmin, ModelAdmin):
 @admin.register(Group)
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):
     pass
-
-
-@admin.register(StudentLastActivity)
-class StudentStudentLastActivity(ModelAdmin):
-    list_display = ['student', 'course', 'last_lesson', 'last_viewed']
-    readonly_fields = ['last_viewed']
-    list_display_links = ['course', 'last_lesson']
-    compressed_fields = True
-    list_filter = ['student', 'course']
 
 
 @admin.register(StudentProgress)

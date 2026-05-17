@@ -12,8 +12,8 @@ from users import forms as student_forms
 from users.forms import StudentProfileForm
 from users.models import StudentProgress
 from users.services.student_course import (get_course_for_student,
-                                           get_lesson_for_student,
-                                           updated_activity)
+                                           get_first_uncompleted_lesson,
+                                           get_lesson_by_slug)
 
 
 class StudentEnrollCourseView(LoginRequiredMixin, SubscriptionCheckMixin, generic.FormView):
@@ -61,16 +61,13 @@ class StudentLessonDetailView(LoginRequiredMixin, SubscriptionCheckMixin, generi
         student = self.request.user
 
         self.course = get_course_for_student(student, course_id)  # get course with cache
-        lesson = get_lesson_for_student(student, self.course.id, lesson_slug)  # get lesson with cache
+
+        if lesson_slug:
+            lesson = get_lesson_by_slug(course_id, lesson_slug)
+        else:
+            lesson = get_first_uncompleted_lesson(student, self.course.id)
 
         return lesson
-
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        updated_activity(student=self.request.user,
-                         course_id=self.course.id,
-                         last_lesson_id=self.object.id)
-        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

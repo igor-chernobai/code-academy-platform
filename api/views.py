@@ -10,8 +10,8 @@ from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
                                  LessonSerializer)
 from subscriptions.serializers import SubscriptionSerializer
 from users.serializers import UserListCreateSerializer, UserUpdateSerializer
-from users.services.student_course import (get_lesson_for_student,
-                                           updated_activity)
+from users.services.student_course import (get_first_uncompleted_lesson,
+                                           get_lesson_by_slug)
 
 
 class CourseViewSet(viewsets.ReadOnlyModelViewSet):
@@ -51,13 +51,15 @@ class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
         course_id = self.kwargs.get('course_id')
         lesson_slug = self.kwargs.get('slug')
 
-        lesson = get_lesson_for_student(self.request.user,
-                                        course_id,
-                                        lesson_slug)
+        if lesson_slug:
+            lesson = get_lesson_by_slug(course_id=course_id,
+                                        lesson_slug=lesson_slug)
+        else:
+            lesson = get_first_uncompleted_lesson(course_id=course_id,
+                                                  student=self.request.user)
+        course = Course.objects.get(id=course_id)
+        self.check_object_permissions(self.request, course)
 
-        updated_activity(student=self.request.user,
-                         course_id=course_id,
-                         last_lesson_id=lesson.id)
         return lesson
 
 

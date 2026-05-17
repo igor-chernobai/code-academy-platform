@@ -2,7 +2,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
-from courses.models import Course
+from courses.models import Course, Lesson, Module
 from subscriptions.models import Plan
 from subscriptions.services.subscription import subscription_create
 
@@ -40,6 +40,28 @@ def course(db):
         slug="python-backend",
         short_description="Learn backend",
         about="Full course description",
+    )
+
+
+@pytest.fixture
+def module(db, course):
+    return Module.objects.create(
+        course=course,
+        title="Django Basics",
+        slug="django-basics",
+        note="Basic Django module",
+        order=1,
+    )
+
+
+@pytest.fixture
+def lesson(db, module):
+    return Lesson.objects.create(
+        module=module,
+        title="Introduction to Django",
+        slug="introduction-to-django",
+        content="Lesson content",
+        order=1,
     )
 
 
