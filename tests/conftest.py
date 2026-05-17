@@ -41,3 +41,13 @@ def course(db):
         short_description="Learn backend",
         about="Full course description",
     )
+
+
+@pytest.fixture
+def another_course():
+    return Course.objects.create(
+        title="Django Advanced",
+        slug="django-advanced",
+        short_description="Advanced Django",
+        about="Full course description",
+    )

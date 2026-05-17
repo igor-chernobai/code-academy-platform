@@ -4,8 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.permissions import (HasActiveSubscription, IsAdminOrReadOnly,
-                             IsEnrolled)
+from api.permissions import HasActiveSubscription, IsEnrolled
 from courses.models import Course, Lesson
 from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
                                  LessonSerializer)

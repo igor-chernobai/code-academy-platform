@@ -1,6 +1,4 @@
 import pytest
-from courses.models import Course
-from django.contrib.auth import get_user_model
 
 
 @pytest.mark.django_db
@@ -44,6 +42,7 @@ def test_user_without_subscription_cannot_enroll_to_course(auth_client, course, 
     assert not course.students.filter(id=user.id).exists()
 
 
+@pytest.mark.django_db
 def test_user_with_subscription_can_enroll_to_course(auth_client_with_active_subscription, course, user):
     response = auth_client_with_active_subscription.post(f'/api/courses/{course.id}/enroll/')
 
@@ -51,3 +50,31 @@ def test_user_with_subscription_can_enroll_to_course(auth_client_with_active_sub
     assert course.students.filter(id=user.id).exists()
     assert response.data['course'] == course.title
     assert response.data['enroll'] is True
+
+
+@pytest.mark.django_db
+def test_guest_cannot_get_my_courses(client):
+    response = client.get('/api/courses/my_courses/')
+
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_user_without_subscription_cannot_get_my_courses(auth_client):
+    response = auth_client.get('/api/courses/my_courses/')
+
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_user_with_subscription_can_get_only_own_courses(auth_client_with_active_subscription, course, another_course,
+                                                         user):
+    course.students.add(user)
+    response = auth_client_with_active_subscription.get('/api/courses/my_courses/')
+
+    courses_id = [item['id'] for item in response.data['student_courses']]
+
+    assert response.status_code == 200
+    assert len(response.data['student_courses']) == 1
+    assert response.data['student_courses'][0]['id'] == course.id
+    assert another_course.id not in courses_id
