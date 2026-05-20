@@ -38,6 +38,7 @@ yarn.lock
 
 # Tailwind
 dist/
+output.css
 
 # IDEs
 .vscode/

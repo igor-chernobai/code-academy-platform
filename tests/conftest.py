@@ -14,7 +14,7 @@ def api_client():
 
 @pytest.fixture
 def user(db):
-    return get_user_model().objects.create_user("testuser", "12345789")
+    return get_user_model().objects.create_user("testuser@gmail.com", "12345789")
 
 
 @pytest.fixture

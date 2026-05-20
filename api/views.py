@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -9,7 +10,7 @@ from courses.models import Course, Lesson
 from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
                                  LessonSerializer)
 from subscriptions.serializers import SubscriptionSerializer
-from users.serializers import UserListCreateSerializer, UserUpdateSerializer
+from users.serializers import UserRegisterSerializer, UserUpdateSerializer
 from users.services.student_course import (get_first_uncompleted_lesson,
                                            get_lesson_by_slug)
 
@@ -57,7 +58,8 @@ class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
         else:
             lesson = get_first_uncompleted_lesson(course_id=course_id,
                                                   student=self.request.user)
-        course = Course.objects.get(id=course_id)
+
+        course = get_object_or_404(Course, id=course_id)
         self.check_object_permissions(self.request, course)
 
         return lesson
@@ -65,7 +67,7 @@ class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
 
 class UserCreate(generics.CreateAPIView):
     queryset = get_user_model().objects.all()
-    serializer_class = UserListCreateSerializer
+    serializer_class = UserRegisterSerializer
 
 
 class UserMeAPIView(generics.RetrieveUpdateAPIView):

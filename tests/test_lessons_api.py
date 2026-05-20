@@ -1,5 +1,4 @@
 import pytest
-from courses.models import Course
 
 
 @pytest.mark.django_db
@@ -23,11 +22,12 @@ def test_user_with_subscription_but_not_enrolled_cannot_open_lesson(auth_client_
     assert response.status_code == 403
 
 
-def test_user_with_subscription_and_enrolled_can_open_lesson(auth_client_with_active_subscription, user, course, module, lesson):
+@pytest.mark.django_db
+def test_user_with_subscription_and_enrolled_can_open_lesson(auth_client_with_active_subscription, user, course, module,
+                                                             lesson):
     course.students.add(user)
     response = auth_client_with_active_subscription.get(f'/api/course/{course.id}/')
 
-    print(response.data)
     assert response.status_code == 200
     assert response.data['title'] == lesson.title
     assert response.data['id'] == lesson.id
