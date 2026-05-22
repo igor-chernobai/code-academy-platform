@@ -9,7 +9,8 @@ from api.permissions import HasActiveSubscription, IsEnrolled
 from courses.models import Course, Lesson
 from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
                                  LessonSerializer)
-from subscriptions.serializers import SubscriptionSerializer
+from subscriptions.models import Plan
+from subscriptions.serializers import SubscriptionSerializer, PlanSerializer
 from users.serializers import UserRegisterSerializer, UserUpdateSerializer
 from users.services.student_course import (get_first_uncompleted_lesson,
                                            get_lesson_by_slug)
@@ -84,3 +85,8 @@ class SubscriptionDetail(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user.subscription
+
+
+class PlanListAPIView(generics.ListAPIView):
+    serializer_class = PlanSerializer
+    queryset = Plan.objects.all()

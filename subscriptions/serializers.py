@@ -11,17 +11,11 @@ class PlanSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'price', 'features', 'duration_days']
 
 
-class PlanShortSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Plan
-        fields = ['id', 'name', 'price', 'duration_days']
-
-
 class SubscriptionSerializer(serializers.ModelSerializer):
     student = serializers.HiddenField(default=serializers.CurrentUserDefault())
     student_data = UserShortSerializer(source='student', read_only=True)
     plan = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Plan.objects.all())
-    plan_data = PlanShortSerializer(source='plan', read_only=True)
+    plan_data = PlanSerializer(source='plan', read_only=True)
     start_date = serializers.DateTimeField(format='%d.%m.%Y %H:%M', read_only=True)
     end_date = serializers.DateTimeField(format='%d.%m.%Y %H:%M', read_only=True)
 

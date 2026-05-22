@@ -24,4 +24,5 @@ urlpatterns = [
     path('auth/register/', views.UserCreate.as_view(), name='register'),
     path('users/me/', views.UserMeAPIView.as_view(), name='user-me'),
     path('subscriptions/my/', views.SubscriptionDetail.as_view(), name='my-subscription'),
+    path('plans/', views.PlanListAPIView.as_view(), name='plan_list')
 ]
