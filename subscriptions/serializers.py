@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 from subscriptions.models import Plan, Subscription
-from subscriptions.services.subscription import subscription_update
+from subscriptions.services.subscription import (subscription_create,
+                                                 subscription_update)
 from users.serializers import UserShortSerializer
 
 
@@ -16,8 +17,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     student_data = UserShortSerializer(source='student', read_only=True)
     plan = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Plan.objects.all())
     plan_data = PlanSerializer(source='plan', read_only=True)
-    start_date = serializers.DateTimeField(format='%d.%m.%Y %H:%M', read_only=True)
-    end_date = serializers.DateTimeField(format='%d.%m.%Y %H:%M', read_only=True)
 
     class Meta:
         model = Subscription
@@ -42,3 +41,22 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
         subscription_update(instance.student, plan)
         return instance
+
+
+class SubscriptionCreateSerializer(serializers.ModelSerializer):
+    student = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    plan = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Plan.objects.all())
+    plan_data = PlanSerializer(source='plan', read_only=True)
+
+    class Meta:
+        model = Subscription
+        fields = ['id', 'student', 'plan_data', 'plan', 'start_date', 'end_date', 'is_active']
+        read_only_fields = ['start_date', 'end_date']
+
+    def create(self, validated_data):
+        student = validated_data['student']
+        plan = validated_data['plan']
+
+        subscription = subscription_create(student, plan)
+
+        return subscription

@@ -7,7 +7,7 @@ from rest_framework.reverse import reverse_lazy
 
 from subscriptions.forms import (StudentRegistrationWithPlanForm,
                                  SubscriptionChangeForm)
-from subscriptions.models import Plan
+from subscriptions.models import Plan, Subscription
 from subscriptions.services.subscription import (subscription_create,
                                                  subscription_update)
 
@@ -41,6 +41,7 @@ class SubscriptionChangeFormView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         plan = form.cleaned_data['plan']
         subscription_update(self.request.user, plan)
+        Subscription.objects.all()
         key = make_template_fragment_key('user_plans', [self.request.user.email])
         cache.delete(key)
         return super().form_valid(form)
