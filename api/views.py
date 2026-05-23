@@ -12,7 +12,7 @@ from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
 from subscriptions.models import Plan, Subscription
 from subscriptions.serializers import (PlanSerializer,
                                        SubscriptionCreateSerializer,
-                                       SubscriptionSerializer)
+                                       SubscriptionDetailSerializer)
 from users.serializers import UserRegisterSerializer, UserUpdateSerializer
 from users.services.student_course import (get_first_uncompleted_lesson,
                                            get_lesson_by_slug)
@@ -87,12 +87,12 @@ class SubscriptionCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class SubscriptionDetail(generics.RetrieveAPIView):
-    serializer_class = SubscriptionSerializer
+class SubscriptionRetrieveAPIVIew(generics.RetrieveAPIView):
+    serializer_class = SubscriptionDetailSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return self.request.user.subscription
+        return get_object_or_404(Subscription, student=self.request.user)
 
 
 class PlanListAPIView(generics.ListAPIView):

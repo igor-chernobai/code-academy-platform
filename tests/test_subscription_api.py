@@ -51,3 +51,33 @@ def test_subscription_create_with_invalid_plan_data(auth_client, plan_data):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert Subscription.objects.count() == 0
     assert 'plan' in response.data
+
+
+@pytest.mark.django_db
+def test_student_can_check_own_subscription(auth_client_with_active_subscription, user):
+    url = reverse('api:my-subscription')
+    response = auth_client_with_active_subscription.get(url)
+
+    subscription = Subscription.objects.get(student=user)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['id'] == subscription.id
+    assert response.data['is_active'] == subscription.is_active
+
+    assert 'student' not in response.data
+    assert 'start_date' in response.data
+    assert 'end_date' in response.data
+
+
+def test_guest_cannot_check_subscription(api_client):
+    url = reverse('api:my-subscription')
+    response = api_client.get(url)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_student_without_subscription(auth_client):
+    url = reverse('api:my-subscription')
+    response = auth_client.get(url)
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND

@@ -60,3 +60,11 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         subscription = subscription_create(student, plan)
 
         return subscription
+
+
+class SubscriptionDetailSerializer(serializers.ModelSerializer):
+    plan = PlanSerializer(read_only=True)
+
+    class Meta:
+        model = Subscription
+        fields = ['id', 'plan', 'start_date', 'end_date', 'is_active']
