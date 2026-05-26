@@ -25,5 +25,6 @@ urlpatterns = [
     path('users/me/', views.UserMeAPIView.as_view(), name='user-me'),
     path('subscriptions/', views.SubscriptionCreateAPIView.as_view(), name='subscription_create'),
     path('subscriptions/me/', views.SubscriptionRetrieveAPIVIew.as_view(), name='my-subscription'),
+    path('subscriptions/update/', views.SubscriptionUpdateAPIView.as_view(), name='subscription_update'),
     path('plans/', views.PlanListAPIView.as_view(), name='plan_list')
 ]

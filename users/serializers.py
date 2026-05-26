@@ -4,12 +4,6 @@ from rest_framework import serializers
 UserModel = get_user_model()
 
 
-class UserShortSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ['id', 'email', 'get_full_name']
-
-
 class UserRegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(label='Ім`я')
     password = serializers.CharField(label='Пароль', write_only=True)

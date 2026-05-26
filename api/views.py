@@ -11,8 +11,9 @@ from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
                                  LessonSerializer)
 from subscriptions.models import Plan, Subscription
 from subscriptions.serializers import (PlanSerializer,
-                                       SubscriptionCreateSerializer,
-                                       SubscriptionDetailSerializer)
+                                       SubscriptionWriteSerializer,
+                                       SubscriptionReadSerializer)
+from subscriptions.services.subscription import subscription_update
 from users.serializers import UserRegisterSerializer, UserUpdateSerializer
 from users.services.student_course import (get_first_uncompleted_lesson,
                                            get_lesson_by_slug)
@@ -82,13 +83,13 @@ class UserMeAPIView(generics.RetrieveUpdateAPIView):
 
 
 class SubscriptionCreateAPIView(generics.CreateAPIView):
-    serializer_class = SubscriptionCreateSerializer
+    serializer_class = SubscriptionWriteSerializer
     queryset = Subscription.objects.all()
     permission_classes = [IsAuthenticated]
 
 
 class SubscriptionRetrieveAPIVIew(generics.RetrieveAPIView):
-    serializer_class = SubscriptionDetailSerializer
+    serializer_class = SubscriptionReadSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -98,3 +99,20 @@ class SubscriptionRetrieveAPIVIew(generics.RetrieveAPIView):
 class PlanListAPIView(generics.ListAPIView):
     serializer_class = PlanSerializer
     queryset = Plan.objects.all()
+
+
+class SubscriptionUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = SubscriptionWriteSerializer
+    queryset = Subscription.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        subscription = get_object_or_404(Subscription, student=self.request.user)
+        self.check_object_permissions(self.request, subscription)
+        return subscription
+
+    def perform_update(self, serializer):
+        student = self.get_object().student
+        plan = serializer.validated_data['plan']
+
+        serializer.instance = subscription_update(student, plan)
