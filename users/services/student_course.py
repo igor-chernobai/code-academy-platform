@@ -41,3 +41,12 @@ def get_first_uncompleted_lesson(student: User, course_id: int):
                                                                                                      'order')
 
     return lessons.first()
+
+
+def complete_lesson(student: User, lesson_id: int):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    obj, created = StudentProgress.objects.get_or_create(lesson=lesson,
+                                                         student=student,
+                                                         defaults={'is_complete': True})
+
+    return obj

@@ -4,6 +4,7 @@ from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from api.permissions import HasActiveSubscription, IsEnrolled
 from courses.models import Course, Lesson
@@ -11,11 +12,13 @@ from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
                                  LessonSerializer)
 from subscriptions.models import Plan, Subscription
 from subscriptions.serializers import (PlanSerializer,
-                                       SubscriptionWriteSerializer,
-                                       SubscriptionReadSerializer)
+                                       SubscriptionReadSerializer,
+                                       SubscriptionWriteSerializer)
 from subscriptions.services.subscription import subscription_update
-from users.serializers import UserRegisterSerializer, UserUpdateSerializer
-from users.services.student_course import (get_first_uncompleted_lesson,
+from users.serializers import (LessonCompleteSerializer,
+                               UserRegisterSerializer, UserUpdateSerializer)
+from users.services.student_course import (complete_lesson,
+                                           get_first_uncompleted_lesson,
                                            get_lesson_by_slug)
 
 
@@ -116,3 +119,13 @@ class SubscriptionUpdateAPIView(generics.UpdateAPIView):
         plan = serializer.validated_data['plan']
 
         serializer.instance = subscription_update(student, plan)
+
+
+class LessonCompleteAPIView(APIView):
+    permission_classes = [IsAuthenticated, HasActiveSubscription]
+
+    def post(self, request, lesson_id, format=None):
+        progress = complete_lesson(request.user, lesson_id)
+        serializer = LessonCompleteSerializer(progress)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

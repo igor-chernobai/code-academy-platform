@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+from users.models import StudentProgress
+
 UserModel = get_user_model()
 
 
@@ -30,3 +32,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ['email', 'first_name', 'last_name']
+
+
+class LessonCompleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProgress
+        fields = ['lesson_id', 'is_complete']
