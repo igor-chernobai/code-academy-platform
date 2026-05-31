@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'django_filters'
+    'django_filters',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -279,7 +280,15 @@ REST_FRAMEWORK = {
     ],
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
     'DATE_FORMAT': "%Y-%m-%d",
-    'TIME_FORMAT': "%H:%M:%S"
+    'TIME_FORMAT': "%H:%M:%S",
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Academy Platform API',
+    'DESCRIPTION': 'API documentation for online learning platform with courses, subscriptions, lessons and student progress',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 SIMPLE_JWT = {

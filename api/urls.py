@@ -1,4 +1,6 @@
 from django.urls import include, path
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt import views as jwt_views
 
@@ -27,5 +29,11 @@ urlpatterns = [
     path('subscriptions/me/', views.SubscriptionRetrieveAPIVIew.as_view(), name='my-subscription'),
     path('subscriptions/update/', views.SubscriptionUpdateAPIView.as_view(), name='subscription_update'),
     path('plans/', views.PlanListAPIView.as_view(), name='plan_list'),
-    path('lesson/<int:lesson_id>/complete/', views.LessonCompleteAPIView.as_view(), name='lesson_complete')
+    path('lesson/<int:lesson_id>/complete/', views.LessonCompleteAPIView.as_view(), name='lesson_complete'),
+
+    # Swagger
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("docs/", SpectacularSwaggerView.as_view(url_name="api:schema"), name="swagger-ui"),
+    path("redoc/", SpectacularRedocView.as_view(url_name="api:schema"), name="redoc"),
+
 ]
