@@ -14,6 +14,7 @@ class SubscriptionWriteSerializer(serializers.ModelSerializer):
     student = serializers.HiddenField(default=serializers.CurrentUserDefault())
     plan = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Plan.objects.all())
     plan_data = PlanSerializer(source='plan', read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Subscription
@@ -36,6 +37,7 @@ class SubscriptionWriteSerializer(serializers.ModelSerializer):
 
 class SubscriptionReadSerializer(serializers.ModelSerializer):
     plan = PlanSerializer(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Subscription

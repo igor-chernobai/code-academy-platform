@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -31,6 +32,11 @@ class CourseViewSet(viewsets.ReadOnlyModelViewSet):
 
         return CourseDetailSerializer
 
+    @extend_schema(
+        request=None,
+        summary='Enroll in course',
+        description='Enrolls authenticated student in the selected course'
+    )
     @action(methods=['post'],
             detail=True,
             permission_classes=[IsAuthenticated, HasActiveSubscription])
@@ -41,6 +47,10 @@ class CourseViewSet(viewsets.ReadOnlyModelViewSet):
                          "enroll": True},
                         status=status.HTTP_201_CREATED)
 
+    @extend_schema(
+        summary='Get my courses',
+        description='Returns courses where the authenticated user is enrolled'
+    )
     @action(methods=['get'],
             detail=False,
             permission_classes=[IsAuthenticated, HasActiveSubscription])
@@ -124,6 +134,13 @@ class SubscriptionUpdateAPIView(generics.UpdateAPIView):
 class LessonCompleteAPIView(APIView):
     permission_classes = [IsAuthenticated, HasActiveSubscription]
 
+
+    @extend_schema(
+        request=None,
+        responses=LessonCompleteSerializer,
+        summary='Complete lesson',
+        description='Marks lesson as completed for authenticated student'
+    )
     def post(self, request, lesson_id, format=None):
         progress = complete_lesson(request.user, lesson_id)
         serializer = LessonCompleteSerializer(progress)

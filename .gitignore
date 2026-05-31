@@ -57,3 +57,6 @@ cache/
 
 # AWS
 my-aws-key.pem
+
+# Swagger
+schema.yml
