@@ -1,26 +1,42 @@
 from django.contrib.auth import get_user_model
-from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from api.permissions import (HasActiveSubscription, IsAdminOrReadOnly,
-                             IsEnrolled)
+from api.permissions import HasActiveSubscription, IsEnrolled
 from courses.models import Course, Lesson
-from courses.serializers import CourseSerializer, LessonSerializer
-from subscriptions.serializers import SubscriptionSerializer
-from users.serializers import UserListCreateSerializer, UserUpdateSerializer
-from users.services.student_course import (get_lesson_for_student,
-                                           updated_activity)
+from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
+                                 LessonSerializer)
+from subscriptions.models import Plan, Subscription
+from subscriptions.serializers import (PlanSerializer,
+                                       SubscriptionReadSerializer,
+                                       SubscriptionWriteSerializer)
+from subscriptions.services.subscription import subscription_update
+from users.serializers import (LessonCompleteSerializer,
+                               UserRegisterSerializer, UserUpdateSerializer)
+from users.services.student_course import (complete_lesson,
+                                           get_first_uncompleted_lesson,
+                                           get_lesson_by_slug)
 
 
-class CourseViewSet(viewsets.ModelViewSet):
+class CourseViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    permission_classes = [IsAdminOrReadOnly]
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CourseListSerializer
+
+        return CourseDetailSerializer
+
+    @extend_schema(
+        request=None,
+        summary='Enroll in course',
+        description='Enrolls authenticated student in the selected course'
+    )
     @action(methods=['post'],
             detail=True,
             permission_classes=[IsAuthenticated, HasActiveSubscription])
@@ -31,10 +47,14 @@ class CourseViewSet(viewsets.ModelViewSet):
                          "enroll": True},
                         status=status.HTTP_201_CREATED)
 
+    @extend_schema(
+        summary='Get my courses',
+        description='Returns courses where the authenticated user is enrolled'
+    )
     @action(methods=['get'],
             detail=False,
             permission_classes=[IsAuthenticated, HasActiveSubscription])
-    def student_courses(self, request):
+    def my_courses(self, request):
         serializer = self.get_serializer(Course.objects.filter(students=self.request.user), many=True)
         return Response({'student_courses': serializer.data},
                         status=status.HTTP_200_OK)
@@ -49,42 +69,80 @@ class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
         course_id = self.kwargs.get('course_id')
         lesson_slug = self.kwargs.get('slug')
 
-        lesson = get_lesson_for_student(self.request.user,
-                                        course_id,
-                                        lesson_slug)
+        if lesson_slug:
+            lesson = get_lesson_by_slug(course_id=course_id,
+                                        lesson_slug=lesson_slug)
+        else:
+            lesson = get_first_uncompleted_lesson(course_id=course_id,
+                                                  student=self.request.user)
 
-        updated_activity(student=self.request.user,
-                         course_id=course_id,
-                         last_lesson_id=lesson.id)
+        course = get_object_or_404(Course, id=course_id)
+        self.check_object_permissions(self.request, course)
+
         return lesson
-
-
-class UserList(generics.ListAPIView):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserListCreateSerializer
-    permission_classes = [IsAdminUser]
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['is_staff', 'is_active']
-    search_fields = ['id', 'email', 'first_name', 'last_name']
-    ordering_fields = ['id', 'date_joined']
 
 
 class UserCreate(generics.CreateAPIView):
     queryset = get_user_model().objects.all()
-    serializer_class = UserListCreateSerializer
+    serializer_class = UserRegisterSerializer
 
 
-class UserDetail(generics.RetrieveUpdateAPIView):
+class UserMeAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated, HasActiveSubscription]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         return self.request.user
 
 
-class SubscriptionDetail(generics.RetrieveUpdateAPIView):
-    serializer_class = SubscriptionSerializer
+class SubscriptionCreateAPIView(generics.CreateAPIView):
+    serializer_class = SubscriptionWriteSerializer
+    queryset = Subscription.objects.all()
+    permission_classes = [IsAuthenticated]
+
+
+class SubscriptionRetrieveAPIVIew(generics.RetrieveAPIView):
+    serializer_class = SubscriptionReadSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return self.request.user.subscription
+        return get_object_or_404(Subscription, student=self.request.user)
+
+
+class PlanListAPIView(generics.ListAPIView):
+    serializer_class = PlanSerializer
+    queryset = Plan.objects.all()
+
+
+class SubscriptionUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = SubscriptionWriteSerializer
+    queryset = Subscription.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        subscription = get_object_or_404(Subscription, student=self.request.user)
+        self.check_object_permissions(self.request, subscription)
+        return subscription
+
+    def perform_update(self, serializer):
+        student = self.get_object().student
+        plan = serializer.validated_data['plan']
+
+        serializer.instance = subscription_update(student, plan)
+
+
+class LessonCompleteAPIView(APIView):
+    permission_classes = [IsAuthenticated, HasActiveSubscription]
+
+
+    @extend_schema(
+        request=None,
+        responses=LessonCompleteSerializer,
+        summary='Complete lesson',
+        description='Marks lesson as completed for authenticated student'
+    )
+    def post(self, request, lesson_id, format=None):
+        progress = complete_lesson(request.user, lesson_id)
+        serializer = LessonCompleteSerializer(progress)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

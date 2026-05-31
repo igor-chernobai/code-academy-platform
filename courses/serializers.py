@@ -3,15 +3,18 @@ from rest_framework import serializers
 from courses.models import Course, Lesson
 
 
-class CourseSerializer(serializers.ModelSerializer):
-    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
+class CourseListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['id', 'title', 'slug', 'created', 'owner', 'about']
+        fields = ['id', 'title', 'slug', 'short_description', 'image']
 
-    def create(self, validated_data):
-        return Course.objects.create(**validated_data)
+
+class CourseDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = [
+            "id", "title", "slug", "short_description", "about", "image", "created"
+        ]
 
 
 class LessonSerializer(serializers.ModelSerializer):

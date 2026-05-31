@@ -13,3 +13,4 @@ Markdown==3.10
 gunicorn==25.1.0
 python-dotenv
 psycopg2-binary
+drf_spectacular

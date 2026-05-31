@@ -38,6 +38,7 @@ yarn.lock
 
 # Tailwind
 dist/
+output.css
 
 # IDEs
 .vscode/
@@ -56,3 +57,6 @@ cache/
 
 # AWS
 my-aws-key.pem
+
+# Swagger
+schema.yml

@@ -19,7 +19,7 @@ def subscription_create(student: UserModel, plan: Plan | int) -> Subscription:
     return subscription
 
 
-def subscription_update(student: UserModel, plan: Plan | int) -> Subscription:
+def subscription_update(student: UserModel, plan: Plan) -> Subscription:
     Subscription.objects.filter(student=student).update(end_date=F("end_date") + timedelta(days=plan.duration_days),
                                                         plan=plan)
 

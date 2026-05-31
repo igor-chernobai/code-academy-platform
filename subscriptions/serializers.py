@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from subscriptions.models import Plan, Subscription
-from subscriptions.services.subscription import subscription_update
-from users.serializers import UserShortSerializer
+from subscriptions.services.subscription import subscription_create
 
 
 class PlanSerializer(serializers.ModelSerializer):
@@ -11,40 +10,35 @@ class PlanSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'price', 'features', 'duration_days']
 
 
-class PlanShortSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Plan
-        fields = ['id', 'name', 'price', 'duration_days']
-
-
-class SubscriptionSerializer(serializers.ModelSerializer):
+class SubscriptionWriteSerializer(serializers.ModelSerializer):
     student = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    student_data = UserShortSerializer(source='student', read_only=True)
     plan = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Plan.objects.all())
-    plan_data = PlanShortSerializer(source='plan', read_only=True)
-    start_date = serializers.DateTimeField(format='%d.%m.%Y %H:%M', read_only=True)
-    end_date = serializers.DateTimeField(format='%d.%m.%Y %H:%M', read_only=True)
+    plan_data = PlanSerializer(source='plan', read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Subscription
-        fields = ['id', 'student', 'student_data', 'plan', 'plan_data', 'start_date', 'end_date', 'is_active']
+        fields = ['id', 'student', 'plan_data', 'plan', 'start_date', 'end_date', 'is_active']
+        read_only_fields = ['start_date', 'end_date']
+
+    def create(self, validated_data):
+        student = validated_data['student']
+        plan = validated_data['plan']
+
+        subscription = subscription_create(student, plan)
+
+        return subscription
 
     def validate(self, data):
-        plan = data.get('plan', None)
-        student = self.context['request'].user
-
-        if plan is None:
-            raise serializers.ValidationError({'plan': 'Виберіть план для підписки'})
-
-        if plan == student.subscription.plan:
-            raise serializers.ValidationError({'plan': 'План не може повторюватися зі старим'})
-
+        if 'plan' not in data:
+            raise serializers.ValidationError('Plan is required')
         return data
 
-    def update(self, instance, validated_data):
-        plan = validated_data.get('plan')
-        instance.plan = plan
-        instance.save()
 
-        subscription_update(instance.student, plan)
-        return instance
+class SubscriptionReadSerializer(serializers.ModelSerializer):
+    plan = PlanSerializer(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Subscription
+        fields = ['id', 'plan', 'start_date', 'end_date', 'is_active']

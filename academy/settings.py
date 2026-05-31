@@ -15,10 +15,10 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv('.env.dev')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -30,7 +30,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 DEBUG = getenv('DEBUG', False)
 
 if getenv('ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = getenv('ALLOWED_HOSTS').split()
+    ALLOWED_HOSTS = getenv('ALLOWED_HOSTS').split(',')
 else:
     ALLOWED_HOSTS = ['*']
 
@@ -59,9 +59,9 @@ INSTALLED_APPS = [
     'mdeditor',
     'debug_toolbar',
     'rest_framework',
-    'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
-    'django_filters'
+    'django_filters',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -276,11 +276,19 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
+    'DATE_FORMAT': "%Y-%m-%d",
+    'TIME_FORMAT': "%H:%M:%S",
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Academy Platform API',
+    'DESCRIPTION': 'API documentation for online learning platform with courses, subscriptions, lessons and student progress',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 SIMPLE_JWT = {

@@ -1,4 +1,4 @@
-from rest_framework.permissions import SAFE_METHODS, BasePermission
+from rest_framework.permissions import BasePermission
 
 
 class IsEnrolled(BasePermission):
@@ -6,14 +6,12 @@ class IsEnrolled(BasePermission):
         return obj.students.filter(id=request.user.id).exists()
 
 
-class IsAdminOrReadOnly(BasePermission):
-    def has_permission(self, request, view):
-        if request.method in SAFE_METHODS:
-            return True
-
-        return request.user.is_staff
-
-
 class HasActiveSubscription(BasePermission):
     def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            return False
+
+        if not hasattr(request.user, 'subscription'):
+            return False
+
         return request.user.subscription.is_active
