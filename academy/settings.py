@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv('.env.dev')
+load_dotenv(BASE_DIR / '.env.dev')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -29,13 +29,9 @@ SECRET_KEY = getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv('DEBUG', False)
 
-if getenv('ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = getenv('ALLOWED_HOSTS').split(',')
-else:
-    ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
-if getenv('CSRF_TRUSTED_ORIGINS'):
-    CSRF_TRUSTED_ORIGINS = getenv('CSRF_TRUSTED_ORIGINS').split()
+CSRF_TRUSTED_ORIGINS = getenv('CSRF_TRUSTED_ORIGINS', '').split()
 
 # Application definition
 
@@ -101,9 +97,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 INTERNAL_IPS = [
-    # ...
     '127.0.0.1',
-    # ...
 ]
 
 CACHES = {
@@ -112,12 +106,6 @@ CACHES = {
         'LOCATION': BASE_DIR / 'cache',
     }
 }
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-#         'LOCATION': 'redis://127.0.0.1:6379',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -179,31 +167,27 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 MDEDITOR_CONFIGS = {
     'default': {
-        'width': '100% ',  # Custom edit box width
-        'height': 400,  # Custom edit box height
-        'toolbar': ['undo', 'redo', '|',
-                    'bold', 'italic', 'quote', 'uppercase', 'lowercase', '|',
-                    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', '|',
-                    'list-ul', 'list-ol', 'hr', '|',
-                    'link', 'reference-link', 'image', 'code', 'code-block', 'table',
-                    'emoji', '|',
-                    '||', 'preview', 'watch', 'fullscreen', 'help', ],  # custom edit box toolbar
-        'upload_image_formats': ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],  # image upload format type
-        'upload_require_auth': False,  # image upload authentication requirement
-        'image_folder': 'editor',  # image save the folder name
-        'theme': 'default',  # edit box theme, dark / default
-        'preview_theme': 'default',  # Preview area theme, dark / default
-        'editor_theme': 'default',  # edit area theme, pastel-on-dark / default
-        'toolbar_autofixed': True,  # Whether the toolbar capitals
-        'search_replace': True,  # Whether to open the search for replacement
-        'emoji': True,  # whether to open the expression function
-        'tex': False,  # whether to open the tex chart function
-        'flow_chart': True,  # whether to open the flow chart function
-        'sequence': True,  # Whether to open the sequence diagram function
-        'watch': True,  # Live preview
-        'lineWrapping': True,  # lineWrapping
-        'lineNumbers': False,  # lineNumbers
-        'language': 'en'  # zh / en / es
+        'width': '100%',
+        'height': 400,
+        'toolbar': [
+            'undo', 'redo', '|',
+            'bold', 'italic', 'quote', '|',
+            'h1', 'h2', 'h3', '|',
+            'list-ul', 'list-ol', 'hr', '|',
+            'link', 'image', 'code', 'code-block', 'table', '|',
+            'preview', 'watch', 'fullscreen', 'help',
+        ],
+        'upload_image_formats': ['jpg', 'jpeg', 'png', 'webp'],
+        'upload_require_auth': True,
+        'image_folder': 'editor',
+        'theme': 'default',
+        'preview_theme': 'default',
+        'editor_theme': 'default',
+        'toolbar_autofixed': True,
+        'watch': True,
+        'lineWrapping': True,
+        'lineNumbers': False,
+        'language': 'en',
     }
 }
 
@@ -218,57 +202,28 @@ AUTH_USER_MODEL = 'users.User'
 
 # Unfold Admin
 UNFOLD = {
-    'SITE_TITLE': 'Custom suffix in <title> tag',
-    'SITE_HEADER': 'Appears in sidebar at the top',
-    'SITE_SUBHEADER': 'Appears under SITE_HEADER',
+    'SITE_TITLE': 'Academy Admin',
+    'SITE_HEADER': 'Academy Platform',
+    'SITE_SUBHEADER': 'Courses, subscriptions and students',
     'SITE_URL': '/',
-    'SITE_SYMBOL': 'speed',  # symbol from icon set
-    'SHOW_HISTORY': False,  # show/hide 'History' button, default: True
-    'SHOW_VIEW_ON_SITE': False,  # show/hide 'View on site' button, default: True
-    'SHOW_BACK_BUTTON': False,  # show/hide 'Back' button on changeform in header, default: False
-    'THEME': 'light',  # Force theme: 'dark' or 'light'. Will disable theme switcher
-    'BORDER_RADIUS': '6px',
-    'COLORS': {
-        'base': {
-            '50': 'oklch(98.5% .002 247.839)',
-            '100': 'oklch(96.7% .003 264.542)',
-            '200': 'oklch(92.8% .006 264.531)',
-            '300': 'oklch(87.2% .01 258.338)',
-            '400': 'oklch(70.7% .022 261.325)',
-            '500': 'oklch(55.1% .027 264.364)',
-            '600': 'oklch(44.6% .03 256.802)',
-            '700': 'oklch(37.3% .034 259.733)',
-            '800': 'oklch(27.8% .033 256.848)',
-            '900': 'oklch(21% .034 264.665)',
-            '950': 'oklch(13% .028 261.692)',
-        },
-        'primary': {
-            '50': 'oklch(97.7% .014 308.299)',
-            '100': 'oklch(94.6% .033 307.174)',
-            '200': 'oklch(90.2% .063 306.703)',
-            '300': 'oklch(82.7% .119 306.383)',
-            '400': 'oklch(71.4% .203 305.504)',
-            '500': 'oklch(62.7% .265 303.9)',
-            '600': 'oklch(55.8% .288 302.321)',
-            '700': 'oklch(49.6% .265 301.924)',
-            '800': 'oklch(43.8% .218 303.724)',
-            '900': 'oklch(38.1% .176 304.987)',
-            '950': 'oklch(29.1% .149 302.717)',
-        },
-        'font': {
-            'subtle-light': 'var(--color-base-500)',  # text-base-500
-            'subtle-dark': 'var(--color-base-400)',  # text-base-400
-            'default-light': 'var(--color-base-600)',  # text-base-600
-            'default-dark': 'var(--color-base-300)',  # text-base-300
-            'important-light': 'var(--color-base-900)',  # text-base-900
-            'important-dark': 'var(--color-base-100)',  # text-base-100
-        },
-    },
+    'SITE_SYMBOL': 'school',
+    'SHOW_HISTORY': True,
+    'SHOW_VIEW_ON_SITE': False,
+    'SHOW_BACK_BUTTON': True,
+    'THEME': 'light',
+    'BORDER_RADIUS': '8px',
     'SIDEBAR': {
-        'show_search': True,  # Search in applications and models names
-        'command_search': False,  # Replace the sidebar search with the command search
-        'show_all_applications': False,  # Dropdown with all applications and models
+        'show_search': True,
+        'command_search': True,
+        'show_all_applications': True,
     },
+}
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 # Django email
@@ -289,50 +244,4 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API documentation for online learning platform with courses, subscriptions, lessons and student progress',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-}
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": False,
-
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": SECRET_KEY,
-    "VERIFYING_KEY": "",
-    "AUDIENCE": None,
-    "ISSUER": None,
-    "JSON_ENCODER": None,
-    "JWK_URL": None,
-    "LEEWAY": 0,
-
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
-    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-    "ON_LOGIN_SUCCESS": "rest_framework_simplejwt.serializers.default_on_login_success",
-    "ON_LOGIN_FAILED": "rest_framework_simplejwt.serializers.default_on_login_failed",
-
-    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-
-    "JTI_CLAIM": "jti",
-
-    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
-
-    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
-    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
-    "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
-    "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
-    "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
-    "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
-
-    "CHECK_REVOKE_TOKEN": False,
-    "REVOKE_TOKEN_CLAIM": "hash_password",
-    "CHECK_USER_IS_ACTIVE": True,
 }
