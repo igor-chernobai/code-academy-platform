@@ -7,7 +7,7 @@ services:
       - 8000
     restart: unless-stopped
     volumes:
-      - static_volume:/usr/src/app/static
+      - static_volume:/usr/src/app/staticfiles
       - media_volume:/usr/src/app/media
     command: gunicorn academy.wsgi:application --bind 0.0.0.0:8000 --access-logfile '-'
     env_file:
@@ -34,7 +34,7 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       start_period: 5s
       retries: 5

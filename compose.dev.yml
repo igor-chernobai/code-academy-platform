@@ -2,11 +2,12 @@ services:
   web:
     build:
       context: .
+      dockerfile: Dockerfile.dev
     ports:
-      - 127.0.0.1:8000:8000
+      - 8000:8000
     restart: unless-stopped
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app:z
     command: python manage.py runserver 0.0.0.0:8000
     env_file:
       - .env.dev
@@ -28,5 +29,19 @@ services:
       timeout: 5s
     restart: unless-stopped
 
+  frontend:
+    build:
+      context: .
+      dockerfile: tailwind/Dockerfile
+    volumes:
+      - ./static:/usr/src/app/static:z
+      - node_modules:/usr/src/app/node_modules:z
+    restart: always
+    depends_on:
+      - web
+    stdin_open: true
+    tty: true
+
 volumes:
   pg_data:
+  node_modules:
