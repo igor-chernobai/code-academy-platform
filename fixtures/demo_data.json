@@ -1,0 +1,557 @@
+[
+{
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$demo$2mYKYpQQz7hM5RHg7Fy+f4Phph8bGcDsRhV59uVznSc=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "Ігор",
+        "last_name": "Чернобай",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-06-01T09:10:00Z",
+        "email": "student1@example.com",
+        "photo": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$demo$2mYKYpQQz7hM5RHg7Fy+f4Phph8bGcDsRhV59uVznSc=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "Олена",
+        "last_name": "Коваль",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-06-01T09:15:00Z",
+        "email": "student2@example.com",
+        "photo": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$KI2UHFsHJRsoPgCOOCYBQd$23vdIrotk/gqeub4vUcEdY3LgrIVYBPLOoPt7y2bFy4=",
+        "last_login": "2026-06-01T09:09:06.344Z",
+        "is_superuser": true,
+        "first_name": "Demo",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-06-01T09:08:59.919Z",
+        "email": "demo@gmail.com",
+        "photo": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$0yShnFxWrQzZBXqBsyu4ab$0pAjyO9Y+SQT0SvZynms6QQZIo/ck61QeHL+WWEuOKg=",
+        "last_login": "2026-06-01T09:32:24.336Z",
+        "is_superuser": true,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-06-01T09:32:03.343Z",
+        "email": "admin@example.com",
+        "photo": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "subscriptions.plan",
+    "pk": 1,
+    "fields": {
+        "name": "Basic",
+        "price": 299,
+        "features": "Доступ до базових курсів\nПерегляд уроків\nБазова підтримка",
+        "duration_days": 30
+    }
+},
+{
+    "model": "subscriptions.plan",
+    "pk": 2,
+    "fields": {
+        "name": "Pro",
+        "price": 599,
+        "features": "Доступ до всіх курсів\nДомашні завдання\nПріоритетна підтримка\nСертифікат після завершення",
+        "duration_days": 30
+    }
+},
+{
+    "model": "subscriptions.plan",
+    "pk": 3,
+    "fields": {
+        "name": "Premium",
+        "price": 1499,
+        "features": "Доступ до всіх курсів\nПеревірка коду\nМенторська підтримка\nПідготовка до співбесіди",
+        "duration_days": 90
+    }
+},
+{
+    "model": "subscriptions.subscription",
+    "pk": 1,
+    "fields": {
+        "plan": 2,
+        "start_date": "2026-06-01T13:00:00Z",
+        "end_date": "2026-07-01T13:00:00Z",
+        "student": 2
+    }
+},
+{
+    "model": "subscriptions.subscription",
+    "pk": 2,
+    "fields": {
+        "plan": 1,
+        "start_date": "2026-06-01T13:10:00Z",
+        "end_date": "2026-07-01T13:10:00Z",
+        "student": 3
+    }
+},
+{
+    "model": "subscriptions.subscription",
+    "pk": 3,
+    "fields": {
+        "plan": 3,
+        "start_date": "2026-06-01T09:09:35.499Z",
+        "end_date": "2026-12-25T22:00:00Z",
+        "student": 4
+    }
+},
+{
+    "model": "subscriptions.subscription",
+    "pk": 6,
+    "fields": {
+        "plan": 3,
+        "start_date": "2026-06-01T09:33:02.304Z",
+        "end_date": "2026-06-30T09:00:00Z",
+        "student": 7
+    }
+},
+{
+    "model": "subscriptions.subscriptionhistory",
+    "pk": 1,
+    "fields": {
+        "plan": 1,
+        "start_date": "2026-04-01T13:00:00Z",
+        "end_date": "2026-05-01T13:00:00Z",
+        "student": 2
+    }
+},
+{
+    "model": "subscriptions.subscriptionhistory",
+    "pk": 2,
+    "fields": {
+        "plan": 2,
+        "start_date": "2026-05-01T13:00:00Z",
+        "end_date": "2026-06-01T13:00:00Z",
+        "student": 2
+    }
+},
+{
+    "model": "subscriptions.subscriptionhistory",
+    "pk": 3,
+    "fields": {
+        "plan": 1,
+        "start_date": "2026-05-01T13:10:00Z",
+        "end_date": "2026-06-01T13:10:00Z",
+        "student": 3
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 1,
+    "fields": {
+        "title": "Python Backend з Django",
+        "slug": "python-backend-django",
+        "created": "2026-06-01T10:00:00Z",
+        "image": "",
+        "short_description": "Практичний курс з Python, Django, баз даних та створення backend-застосунків.",
+        "about": "На цьому курсі студент навчиться створювати backend на Django, працювати з моделями, шаблонами, формами, авторизацією та базою даних.",
+        "owner": null,
+        "students": [
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 2,
+    "fields": {
+        "title": "Django REST Framework API",
+        "slug": "django-rest-framework-api",
+        "created": "2026-06-01T10:10:00Z",
+        "image": "course_image/priroda-hud-gora-les-ozero.jpg",
+        "short_description": "Курс зі створення REST API на Django REST Framework.",
+        "about": "Студент навчиться створювати API, серіалізатори, ViewSet, permissions, authentication, фільтри та документацію Swagger.",
+        "owner": null,
+        "students": [
+            2,
+            4,
+            7
+        ]
+    }
+},
+{
+    "model": "courses.course",
+    "pk": 3,
+    "fields": {
+        "title": "Основи PostgreSQL",
+        "slug": "postgresql-basics",
+        "created": "2026-06-01T10:20:00Z",
+        "image": "course_image/vodopad-ruchei-kamni.jpg",
+        "short_description": "Базовий курс з SQL та PostgreSQL для backend-розробника.",
+        "about": "На курсі розглядаються таблиці, зв'язки, JOIN, індекси, агрегації та базова оптимізація запитів.",
+        "owner": null,
+        "students": [
+            3
+        ]
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 1,
+    "fields": {
+        "course": 1,
+        "title": "Вступ",
+        "slug": "django-course-introduction",
+        "created": "2026-06-01T10:30:00Z",
+        "note": "Коротке знайомство з курсом, його метою та результатом після проходження.",
+        "order": 1
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 2,
+    "fields": {
+        "course": 1,
+        "title": "Вступ до Django",
+        "slug": "django-intro",
+        "created": "2026-06-01T10:35:00Z",
+        "note": "У цьому модулі студент знайомиться з Django та структурою проєкту.",
+        "order": 2
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 3,
+    "fields": {
+        "course": 1,
+        "title": "Моделі та база даних",
+        "slug": "models-and-database",
+        "created": "2026-06-01T10:40:00Z",
+        "note": "Модуль про Django ORM, моделі, міграції та зв'язки між таблицями.",
+        "order": 3
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 4,
+    "fields": {
+        "course": 1,
+        "title": "Завершення",
+        "slug": "django-course-finish",
+        "created": "2026-06-01T10:45:00Z",
+        "note": "Фінальний модуль з підсумком курсу та наступними кроками.",
+        "order": 4
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 5,
+    "fields": {
+        "course": 2,
+        "title": "Вступ",
+        "slug": "drf-course-introduction",
+        "created": "2026-06-01T10:50:00Z",
+        "note": "Коротке знайомство з курсом, його метою та структурою.",
+        "order": 1
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 6,
+    "fields": {
+        "course": 2,
+        "title": "Основи DRF",
+        "slug": "drf-basics",
+        "created": "2026-06-01T10:55:00Z",
+        "note": "Модуль про serializers, APIView та ViewSet.",
+        "order": 2
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 7,
+    "fields": {
+        "course": 2,
+        "title": "Завершення",
+        "slug": "drf-course-finish",
+        "created": "2026-06-01T11:00:00Z",
+        "note": "Фінальний модуль з підсумком курсу та порадами для практики.",
+        "order": 3
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 8,
+    "fields": {
+        "course": 3,
+        "title": "Вступ",
+        "slug": "postgresql-course-introduction",
+        "created": "2026-06-01T11:05:00Z",
+        "note": "Коротке знайомство з курсом та роллю SQL у backend-розробці.",
+        "order": 1
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 9,
+    "fields": {
+        "course": 3,
+        "title": "SQL база",
+        "slug": "sql-basics",
+        "created": "2026-06-01T11:10:00Z",
+        "note": "Модуль про SELECT, WHERE, JOIN та GROUP BY.",
+        "order": 2
+    }
+},
+{
+    "model": "courses.module",
+    "pk": 10,
+    "fields": {
+        "course": 3,
+        "title": "Завершення",
+        "slug": "postgresql-course-finish",
+        "created": "2026-06-01T11:15:00Z",
+        "note": "Фінальний модуль з підсумком курсу та наступними темами для вивчення.",
+        "order": 3
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 1,
+    "fields": {
+        "module": 1,
+        "title": "Про курс",
+        "slug": "about-django-course",
+        "content": "На цьому курсі ти поступово розберешся, як створювати backend-застосунки на Django.\n\nТи побачиш, як працюють моделі, міграції, маршрути, шаблони, форми та авторизація.\n\nГоловна мета курсу — не просто прочитати теорію, а зрозуміти, як Django використовується у реальному проєкті.",
+        "created": "2026-06-01T11:20:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 2,
+    "fields": {
+        "module": 2,
+        "title": "Що таке Django",
+        "slug": "what-is-django",
+        "content": "Django — це Python-фреймворк для швидкої розробки веб-застосунків.\n\nВін допомагає працювати з базою даних, URL-адресами, HTML-шаблонами, формами, користувачами та адмін-панеллю.\n\n```python\nprint('Hello, Django!')\n```\n\nПісля цього уроку студент розуміє базову ідею Django та його роль у backend-розробці.",
+        "created": "2026-06-01T11:25:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 3,
+    "fields": {
+        "module": 2,
+        "title": "Структура Django-проєкту",
+        "slug": "django-project-structure",
+        "content": "Django-проєкт складається з кількох важливих частин.\n\nОсновні файли та папки:\n\n- `settings.py`\n- `urls.py`\n- `models.py`\n- `views.py`\n- `templates/`\n- `static/`\n\nКоли ти розумієш цю структуру, тобі легше читати чужі проєкти та створювати свої.",
+        "created": "2026-06-01T11:30:00Z",
+        "order": 2
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 4,
+    "fields": {
+        "module": 3,
+        "title": "Моделі в Django",
+        "slug": "django-models",
+        "content": "Модель описує таблицю в базі даних.\n\nЧерез модель Django дозволяє створювати, читати, оновлювати та видаляти записи без написання чистого SQL.\n\n```python\nclass Course(models.Model):\n    title = models.CharField(max_length=155)\n```\n\nПісля зміни моделей потрібно створити та застосувати міграції.",
+        "created": "2026-06-01T11:35:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 5,
+    "fields": {
+        "module": 3,
+        "title": "Міграції",
+        "slug": "migrations",
+        "content": "Міграції потрібні, щоб синхронізувати моделі Django з базою даних.\n\nКоли ти змінюєш модель, Django має знати, як змінити таблицю в базі.\n\n```bash\npython manage.py makemigrations\npython manage.py migrate\n```\n\nЦе одна з базових команд у щоденній роботі Django-розробника.",
+        "created": "2026-06-01T11:40:00Z",
+        "order": 2
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 6,
+    "fields": {
+        "module": 4,
+        "title": "Вітаємо із завершенням курсу",
+        "slug": "django-course-congratulations",
+        "content": "Вітаємо! Ти пройшов курс і зробив важливий крок у вивченні Django.\n\nТепер ти краще розумієш, як працює backend, як Django взаємодіє з базою даних і як будуються веб-застосунки.\n\nНаступний крок — створити власний невеликий проєкт і закріпити знання на практиці.",
+        "created": "2026-06-01T11:45:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 7,
+    "fields": {
+        "module": 5,
+        "title": "Про курс",
+        "slug": "about-drf-course",
+        "content": "На цьому курсі ти навчишся створювати REST API за допомогою Django REST Framework.\n\nAPI потрібне, щоб frontend, мобільний застосунок або інший сервіс могли отримувати дані з backend.\n\nПісля проходження курсу ти краще зрозумієш serializers, views, permissions та authentication.",
+        "created": "2026-06-01T11:50:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 8,
+    "fields": {
+        "module": 6,
+        "title": "Serializer у DRF",
+        "slug": "drf-serializer",
+        "content": "Serializer перетворює Django-модель у JSON і назад.\n\nЦе одна з головних частин Django REST Framework.\n\n```python\nclass CourseSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Course\n        fields = '__all__'\n```\n\nSerializer допомагає контролювати, які поля будуть доступні в API.",
+        "created": "2026-06-01T11:55:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 9,
+    "fields": {
+        "module": 6,
+        "title": "ViewSet у DRF",
+        "slug": "drf-viewset",
+        "content": "ViewSet дозволяє швидко створити CRUD API.\n\nЗамість того щоб окремо писати list, retrieve, create, update та delete, можна використати готову структуру.\n\n```python\nclass CourseViewSet(ModelViewSet):\n    queryset = Course.objects.all()\n    serializer_class = CourseSerializer\n```\n\nЦе зручно для типових ресурсів, наприклад курсів, уроків або підписок.",
+        "created": "2026-06-01T12:00:00Z",
+        "order": 2
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 10,
+    "fields": {
+        "module": 7,
+        "title": "Вітаємо із завершенням курсу",
+        "slug": "drf-course-congratulations",
+        "content": "Вітаємо! Ти завершив курс з Django REST Framework.\n\nТепер ти знаєш, як створювати базове API, працювати з серіалізаторами та будувати endpoints для frontend або мобільного застосунку.\n\nЩоб закріпити знання, створи API для власного проєкту та додай документацію через Swagger.",
+        "created": "2026-06-01T12:05:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 11,
+    "fields": {
+        "module": 8,
+        "title": "Про курс",
+        "slug": "about-postgresql-course",
+        "content": "На цьому курсі ти познайомишся з базовими можливостями PostgreSQL.\n\nSQL потрібен backend-розробнику для роботи з даними, таблицями, зв'язками та аналітичними запитами.\n\nПісля проходження курсу ти зможеш краще розуміти, що відбувається в базі даних під час роботи Django ORM.",
+        "created": "2026-06-01T12:10:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 12,
+    "fields": {
+        "module": 9,
+        "title": "SELECT і WHERE",
+        "slug": "select-and-where",
+        "content": "`SELECT` використовується для отримання даних з таблиці.\n\n`WHERE` дозволяє додати умову та отримати тільки потрібні записи.\n\n```sql\nSELECT * FROM courses WHERE price > 500;\n```\n\nЦе базовий запит, з якого починається робота з SQL.",
+        "created": "2026-06-01T12:15:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 13,
+    "fields": {
+        "module": 9,
+        "title": "JOIN у SQL",
+        "slug": "sql-join",
+        "content": "`JOIN` дозволяє отримувати дані з кількох таблиць.\n\nЦе важливо, коли дані пов'язані між собою, наприклад користувачі та курси.\n\n```sql\nSELECT users.email, courses.title\nFROM users\nJOIN courses ON users.id = courses.owner_id;\n```\n\nУ реальних backend-проєктах JOIN використовується дуже часто.",
+        "created": "2026-06-01T12:20:00Z",
+        "order": 2
+    }
+},
+{
+    "model": "courses.lesson",
+    "pk": 14,
+    "fields": {
+        "module": 10,
+        "title": "Вітаємо із завершенням курсу",
+        "slug": "postgresql-course-congratulations",
+        "content": "Вітаємо! Ти завершив базовий курс з PostgreSQL.\n\nТепер ти краще розумієш, як працювати з таблицями, умовами, зв'язками та SQL-запитами.\n\nНаступний крок — вивчити індекси, транзакції, оптимізацію запитів та зв'язок SQL з Django ORM.",
+        "created": "2026-06-01T12:25:00Z",
+        "order": 1
+    }
+},
+{
+    "model": "courses.review",
+    "pk": 1,
+    "fields": {
+        "student": 2,
+        "course": 1,
+        "text": "Курс добре пояснює Django з нуля. Особливо сподобались приклади з моделями.",
+        "created_at": "2026-06-01T12:30:00Z",
+        "rating": 5
+    }
+},
+{
+    "model": "courses.review",
+    "pk": 2,
+    "fields": {
+        "student": 3,
+        "course": 1,
+        "text": "Матеріал зрозумілий, але хотілося б більше практичних завдань.",
+        "created_at": "2026-06-01T12:35:00Z",
+        "rating": 4
+    }
+},
+{
+    "model": "courses.review",
+    "pk": 3,
+    "fields": {
+        "student": 2,
+        "course": 2,
+        "text": "Корисний курс для старту з DRF. ViewSet і permissions стали зрозумілішими.",
+        "created_at": "2026-06-01T12:40:00Z",
+        "rating": 5
+    }
+},
+{
+    "model": "courses.review",
+    "pk": 4,
+    "fields": {
+        "student": 3,
+        "course": 3,
+        "text": "Хороша база по SQL. Приклади прості та зрозумілі.",
+        "created_at": "2026-06-01T12:45:00Z",
+        "rating": 4
+    }
+}
+]

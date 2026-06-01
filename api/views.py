@@ -134,7 +134,6 @@ class SubscriptionUpdateAPIView(generics.UpdateAPIView):
 class LessonCompleteAPIView(APIView):
     permission_classes = [IsAuthenticated, HasActiveSubscription]
 
-
     @extend_schema(
         request=None,
         responses=LessonCompleteSerializer,
