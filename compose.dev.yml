@@ -4,10 +4,10 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - 8000:8000
+      - "8000:8000"
     restart: unless-stopped
     volumes:
-      - .:/usr/src/app:z
+      - .:/usr/src/app
     command: python manage.py runserver 0.0.0.0:8000
     env_file:
       - .env.dev
@@ -34,13 +34,29 @@ services:
       context: .
       dockerfile: tailwind/Dockerfile
     volumes:
-      - ./static:/usr/src/app/static:z
-      - node_modules:/usr/src/app/node_modules:z
+      - ./static:/usr/src/app/static
+      - node_modules:/usr/src/app/node_modules
     restart: always
     depends_on:
       - web
     stdin_open: true
     tty: true
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: .env.dev
+    command: celery -A academy worker -l INFO
+    depends_on:
+      - redis
+      - db
+
 
 volumes:
   pg_data:

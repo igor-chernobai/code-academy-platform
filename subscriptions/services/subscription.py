@@ -5,6 +5,7 @@ from django.db.models import F
 from django.utils import timezone
 
 from subscriptions.models import Plan, Subscription, SubscriptionHistory
+from subscriptions.tasks import send_welcome_email, send_update_subscription_email
 
 UserModel = get_user_model()
 
@@ -16,6 +17,8 @@ def subscription_create(student: UserModel, plan: Plan | int) -> Subscription:
     subscription = Subscription.objects.create(**subscription_data)
     SubscriptionHistory.objects.create(**subscription_data)
 
+    send_welcome_email.delay_on_commit(subscription.id)
+
     return subscription
 
 
@@ -26,5 +29,7 @@ def subscription_update(student: UserModel, plan: Plan) -> Subscription:
     subscription = Subscription.objects.get(student=student)
     subscription_data = {'student': student, 'plan': plan, 'end_date': subscription.end_date}
     SubscriptionHistory.objects.create(**subscription_data)
+
+    send_update_subscription_email(subscription.id)
 
     return subscription
