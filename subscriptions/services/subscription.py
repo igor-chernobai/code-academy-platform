@@ -30,6 +30,6 @@ def subscription_update(student: UserModel, plan: Plan) -> Subscription:
     subscription_data = {'student': student, 'plan': plan, 'end_date': subscription.end_date}
     SubscriptionHistory.objects.create(**subscription_data)
 
-    send_update_subscription_email(subscription.id)
+    send_update_subscription_email.delay_on_commit(subscription.id)
 
     return subscription
