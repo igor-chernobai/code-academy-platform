@@ -10,28 +10,26 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 '''
 from datetime import timedelta
-from os import getenv
+from os import environ
 from pathlib import Path
 
-from dotenv import load_dotenv
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-load_dotenv(BASE_DIR / '.env.dev')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = getenv('SECRET_KEY')
+SECRET_KEY = environ.get('SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv('DEBUG', False)
+DEBUG = environ.get('DEBUG', '') == "1"
 
-ALLOWED_HOSTS = getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = environ.get('ALLOWED_HOSTS', 'localhost,web').split(',')
 
-CSRF_TRUSTED_ORIGINS = getenv('CSRF_TRUSTED_ORIGINS', '').split()
+CSRF_TRUSTED_ORIGINS = environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 # Application definition
 
@@ -100,26 +98,28 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
+REDIS_URL = environ.get('REDIS_URL', 'redis://redis:6379/0')
+
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': BASE_DIR / 'cache',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': REDIS_URL,
     }
 }
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': getenv('POSTGRES_DB'),
-        'USER': getenv('POSTGRES_USER'),
-        'PASSWORD': getenv('POSTGRES_PASSWORD'),
-        'HOST': getenv('POSTGRES_HOST'),
-        'PORT': getenv('POSTGRES_PORT')
+        'NAME': environ.get('POSTGRES_DB', 'academy_db'),
+        'USER': environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': environ.get('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': environ.get('POSTGRES_HOST', 'db'),
+        'PORT': '5432'
     }
 }
 
 # Celery configuration
-CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_BROKER_URL = environ.get('CELERY_BROKER_URL', 'redis://redis:6379/0')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
