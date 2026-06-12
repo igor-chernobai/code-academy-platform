@@ -18,7 +18,5 @@ class StudentRegistrationWithPlanForm(UserCreationForm):
 class SubscriptionChangeForm(ModelForm):
     class Meta:
         model = Subscription
-        fields = ['plan']
-        error_messages = {
-            'plan': {'required': 'Оберіть, будь-ласка, план підписки'}
-        }
+        fields = ["plan"]
+        error_messages = {"plan": {"required": "Оберіть, будь-ласка, план підписки"}}

@@ -11,7 +11,7 @@ class HasActiveSubscription(BasePermission):
         if not request.user.is_authenticated:
             return False
 
-        if not hasattr(request.user, 'subscription'):
+        if not hasattr(request.user, "subscription"):
             return False
 
         return request.user.subscription.is_active

@@ -26,9 +26,7 @@ def auth_client(user, api_client):
 @pytest.fixture
 def auth_client_with_active_subscription(user, api_client):
     api_client.force_authenticate(user=user)
-    plan = Plan.objects.create(
-        name="Test Plan", price=9999, features="Test", duration_days=30
-    )
+    plan = Plan.objects.create(name="Test Plan", price=9999, features="Test", duration_days=30)
     subscription_create(student=user, plan=plan)
     return api_client
 
@@ -77,19 +75,9 @@ def another_course():
 
 @pytest.fixture
 def basic_plan():
-    return Plan.objects.create(
-        name='Basic Plan',
-        price=500,
-        features='Test features',
-        duration_days=30
-    )
+    return Plan.objects.create(name="Basic Plan", price=500, features="Test features", duration_days=30)
 
 
 @pytest.fixture
 def pro_plan():
-    return Plan.objects.create(
-        name='Professional Plan',
-        price=3000,
-        features='Test features',
-        duration_days=365
-    )
+    return Plan.objects.create(name="Professional Plan", price=3000, features="Test features", duration_days=365)

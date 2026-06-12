@@ -9,55 +9,37 @@ from rest_framework.views import APIView
 
 from api.permissions import HasActiveSubscription, IsEnrolled
 from courses.models import Course, Lesson
-from courses.serializers import (CourseDetailSerializer, CourseListSerializer,
-                                 LessonSerializer)
+from courses.serializers import CourseDetailSerializer, CourseListSerializer, LessonSerializer
 from subscriptions.models import Plan, Subscription
-from subscriptions.serializers import (PlanSerializer,
-                                       SubscriptionReadSerializer,
-                                       SubscriptionWriteSerializer)
+from subscriptions.serializers import PlanSerializer, SubscriptionReadSerializer, SubscriptionWriteSerializer
 from subscriptions.services.subscription import subscription_update
-from users.serializers import (LessonCompleteSerializer,
-                               UserRegisterSerializer, UserUpdateSerializer)
-from users.services.student_course import (complete_lesson,
-                                           get_first_uncompleted_lesson,
-                                           get_lesson_by_slug)
+from users.serializers import LessonCompleteSerializer, UserRegisterSerializer, UserUpdateSerializer
+from users.services.student_course import complete_lesson, get_first_uncompleted_lesson, get_lesson_by_slug
 
 
 class CourseViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Course.objects.all()
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
             return CourseListSerializer
 
         return CourseDetailSerializer
 
     @extend_schema(
-        request=None,
-        summary='Enroll in course',
-        description='Enrolls authenticated student in the selected course'
+        request=None, summary="Enroll in course", description="Enrolls authenticated student in the selected course"
     )
-    @action(methods=['post'],
-            detail=True,
-            permission_classes=[IsAuthenticated, HasActiveSubscription])
+    @action(methods=["post"], detail=True, permission_classes=[IsAuthenticated, HasActiveSubscription])
     def enroll(self, request, *args, **kwargs):
         course = self.get_object()
         course.students.add(request.user)
-        return Response({"course": course.title,
-                         "enroll": True},
-                        status=status.HTTP_201_CREATED)
+        return Response({"course": course.title, "enroll": True}, status=status.HTTP_201_CREATED)
 
-    @extend_schema(
-        summary='Get my courses',
-        description='Returns courses where the authenticated user is enrolled'
-    )
-    @action(methods=['get'],
-            detail=False,
-            permission_classes=[IsAuthenticated, HasActiveSubscription])
+    @extend_schema(summary="Get my courses", description="Returns courses where the authenticated user is enrolled")
+    @action(methods=["get"], detail=False, permission_classes=[IsAuthenticated, HasActiveSubscription])
     def my_courses(self, request):
         serializer = self.get_serializer(Course.objects.filter(students=self.request.user), many=True)
-        return Response({'student_courses': serializer.data},
-                        status=status.HTTP_200_OK)
+        return Response({"student_courses": serializer.data}, status=status.HTTP_200_OK)
 
 
 class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
@@ -66,15 +48,13 @@ class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated, HasActiveSubscription, IsEnrolled]
 
     def get_object(self):
-        course_id = self.kwargs.get('course_id')
-        lesson_slug = self.kwargs.get('slug')
+        course_id = self.kwargs.get("course_id")
+        lesson_slug = self.kwargs.get("slug")
 
         if lesson_slug:
-            lesson = get_lesson_by_slug(course_id=course_id,
-                                        lesson_slug=lesson_slug)
+            lesson = get_lesson_by_slug(course_id=course_id, lesson_slug=lesson_slug)
         else:
-            lesson = get_first_uncompleted_lesson(course_id=course_id,
-                                                  student=self.request.user)
+            lesson = get_first_uncompleted_lesson(course_id=course_id, student=self.request.user)
 
         course = get_object_or_404(Course, id=course_id)
         self.check_object_permissions(self.request, course)
@@ -126,7 +106,7 @@ class SubscriptionUpdateAPIView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         student = self.get_object().student
-        plan = serializer.validated_data['plan']
+        plan = serializer.validated_data["plan"]
 
         serializer.instance = subscription_update(student, plan)
 
@@ -137,8 +117,8 @@ class LessonCompleteAPIView(APIView):
     @extend_schema(
         request=None,
         responses=LessonCompleteSerializer,
-        summary='Complete lesson',
-        description='Marks lesson as completed for authenticated student'
+        summary="Complete lesson",
+        description="Marks lesson as completed for authenticated student",
     )
     def post(self, request, lesson_id, format=None):
         progress = complete_lesson(request.user, lesson_id)

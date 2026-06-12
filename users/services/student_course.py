@@ -25,28 +25,28 @@ def get_course_for_student(student: User, course_id: int) -> Course:
 
 
 def get_lesson_by_slug(course_id: int, lesson_slug: str):
-    lesson = get_object_or_404(Lesson.objects.select_related('module__course'), slug=lesson_slug,
-                               module__course_id=course_id)
+    lesson = get_object_or_404(
+        Lesson.objects.select_related("module__course"), slug=lesson_slug, module__course_id=course_id
+    )
     return lesson
 
 
 def get_first_uncompleted_lesson(student: User, course_id: int):
-    lessons_id = (StudentProgress.objects
-                  .select_related('lesson__module__course_id')
-                  .filter(student=student,
-                          is_complete=True,
-                          lesson__module__course_id=course_id).values_list('lesson_id', flat=True))
+    lessons_id = (
+        StudentProgress.objects.select_related("lesson__module__course_id")
+        .filter(student=student, is_complete=True, lesson__module__course_id=course_id)
+        .values_list("lesson_id", flat=True)
+    )
 
-    lessons = Lesson.objects.filter(module__course_id=course_id).exclude(id__in=lessons_id).order_by('module__order',
-                                                                                                     'order')
+    lessons = (
+        Lesson.objects.filter(module__course_id=course_id).exclude(id__in=lessons_id).order_by("module__order", "order")
+    )
 
     return lessons.first()
 
 
 def complete_lesson(student: User, lesson_id: int):
     lesson = get_object_or_404(Lesson, id=lesson_id)
-    obj, created = StudentProgress.objects.get_or_create(lesson=lesson,
-                                                         student=student,
-                                                         defaults={'is_complete': True})
+    obj, created = StudentProgress.objects.get_or_create(lesson=lesson, student=student, defaults={"is_complete": True})
 
     return obj

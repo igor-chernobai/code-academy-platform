@@ -1,4 +1,4 @@
-'''
+"""
 URL configuration for academy project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -13,7 +13,8 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-'''
+"""
+
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,16 +24,15 @@ from django.urls import include, path
 from courses.views import AboutTemplateView, CourseListView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path(r'mdeditor/', include('mdeditor.urls')),
-    path('courses/', include('courses.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('students/', include('users.urls', namespace='students')),
-    path('subscriptions/', include('subscriptions.urls')),
-    path('api/', include('api.urls')),
-    path('', CourseListView.as_view(), name='course_list'),
-    path('about/', AboutTemplateView.as_view(), name='about')
-
+    path("admin/", admin.site.urls),
+    path(r"mdeditor/", include("mdeditor.urls")),
+    path("courses/", include("courses.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("students/", include("users.urls", namespace="students")),
+    path("subscriptions/", include("subscriptions.urls")),
+    path("api/", include("api.urls")),
+    path("", CourseListView.as_view(), name="course_list"),
+    path("about/", AboutTemplateView.as_view(), name="about"),
 ]
 
 

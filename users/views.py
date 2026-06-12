@@ -11,9 +11,7 @@ from subscriptions.mixins import SubscriptionCheckMixin
 from users import forms as student_forms
 from users.forms import StudentProfileForm
 from users.models import StudentProgress
-from users.services.student_course import (get_course_for_student,
-                                           get_first_uncompleted_lesson,
-                                           get_lesson_by_slug)
+from users.services.student_course import get_course_for_student, get_first_uncompleted_lesson, get_lesson_by_slug
 
 
 class StudentEnrollCourseView(LoginRequiredMixin, SubscriptionCheckMixin, generic.FormView):
@@ -21,43 +19,46 @@ class StudentEnrollCourseView(LoginRequiredMixin, SubscriptionCheckMixin, generi
     form_class = student_forms.CourseEnrollForm
 
     def form_valid(self, form):
-        self.course = form.cleaned_data['course']
+        self.course = form.cleaned_data["course"]
 
         self.course.students.add(self.request.user)
-        key = f'course_{self.course.slug}:{self.request.user.id}'
+        key = f"course_{self.course.slug}:{self.request.user.id}"
         cache.delete(key)
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('students:student_course', args=[self.course.id])
+        return reverse_lazy("students:student_course", args=[self.course.id])
 
 
 class StudentCourseListView(LoginRequiredMixin, SubscriptionCheckMixin, generic.ListView):
     model = Course
-    template_name = 'users/student_courses.html'
-    context_object_name = 'courses'
+    template_name = "users/student_courses.html"
+    context_object_name = "courses"
 
     def get_queryset(self):
-        key = f'courses_for_{self.request.user.id}'
+        key = f"courses_for_{self.request.user.id}"
         courses = cache.get(key)
 
         if courses is None:
-            courses = super().get_queryset().filter(students=self.request.user).annotate(
-                count_modules=Count('modules', distinct=True),
-                count_lessons=Count('modules__lessons'))
+            courses = (
+                super()
+                .get_queryset()
+                .filter(students=self.request.user)
+                .annotate(count_modules=Count("modules", distinct=True), count_lessons=Count("modules__lessons"))
+            )
             cache.set(key, courses, 300)
         return courses
 
 
 class StudentLessonDetailView(LoginRequiredMixin, SubscriptionCheckMixin, generic.DetailView):
     model = Lesson
-    template_name = 'users/student_lesson.html'
-    slug_url_kwarg = 'lesson_slug'
+    template_name = "users/student_lesson.html"
+    slug_url_kwarg = "lesson_slug"
     course = None
 
     def get_object(self, queryset=None):
-        course_id = self.kwargs.get('course_id', None)
-        lesson_slug = self.kwargs.get('lesson_slug', None)
+        course_id = self.kwargs.get("course_id", None)
+        lesson_slug = self.kwargs.get("lesson_slug", None)
         student = self.request.user
 
         self.course = get_course_for_student(student, course_id)  # get course with cache
@@ -71,9 +72,10 @@ class StudentLessonDetailView(LoginRequiredMixin, SubscriptionCheckMixin, generi
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['course'] = self.course
-        context['lesson_complete_form'] = student_forms.LessonCompleteForm(
-            initial={'lesson': self.object, 'course': self.course})
+        context["course"] = self.course
+        context["lesson_complete_form"] = student_forms.LessonCompleteForm(
+            initial={"lesson": self.object, "course": self.course}
+        )
         return context
 
 
@@ -85,23 +87,21 @@ class LessonCompleteView(LoginRequiredMixin, SubscriptionCheckMixin, View):
         form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            lesson = cd['lesson']
+            lesson = cd["lesson"]
 
-            StudentProgress.objects.get_or_create(student=request.user,
-                                                  lesson=lesson,
-                                                  defaults={'is_complete': True})
+            StudentProgress.objects.get_or_create(student=request.user, lesson=lesson, defaults={"is_complete": True})
             next_lesson = lesson.get_next
             if next_lesson:
-                return redirect('students:student_course_lesson', cd['course'].id, next_lesson.slug)
-            return redirect('course_list')
-        return redirect('course_list')
+                return redirect("students:student_course_lesson", cd["course"].id, next_lesson.slug)
+            return redirect("course_list")
+        return redirect("course_list")
 
 
 class StudentProfileView(LoginRequiredMixin, generic.UpdateView):
     model = get_user_model()
-    template_name = 'users/profile.html'
+    template_name = "users/profile.html"
     form_class = StudentProfileForm
-    success_url = reverse_lazy('students:profile')
+    success_url = reverse_lazy("students:profile")
 
     def get_object(self, queryset=None):
         return self.request.user
