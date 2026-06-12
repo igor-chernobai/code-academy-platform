@@ -1,0 +1,32 @@
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+# Ignore dirs
+exclude = [
+    ".git",
+    ".venv",
+    "migrations",
+    "__pycache__"
+]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+    "UP",
+    "B",
+    "DJ",
+    "SIM",
+]
+
+ignore = [
+    "E501"
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
