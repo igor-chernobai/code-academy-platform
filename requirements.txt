@@ -15,3 +15,4 @@ drf_spectacular
 redis==8.0.0
 celery==5.6.3
 ruff==0.15.17
+pytest-cov==7.1.0

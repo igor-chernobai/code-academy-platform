@@ -60,3 +60,6 @@ my-aws-key.pem
 
 # Swagger
 schema.yml
+
+# Pytest
+.coverage

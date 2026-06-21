@@ -10,6 +10,7 @@
 ![Nginx](https://img.shields.io/badge/Nginx-reverse_proxy-009639?logo=nginx&logoColor=white)
 ![Swagger](https://img.shields.io/badge/Swagger-API_docs-85EA2D?logo=swagger&logoColor=black)
 ![pytest](https://img.shields.io/badge/tests-pytest-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-87%25-brightgreen)
 
 ![Project Preview](docs/images/project-preview.png)
 
