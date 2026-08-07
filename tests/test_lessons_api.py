@@ -20,7 +20,9 @@ def test_user_without_subscription_cannot_open_lesson(auth_client, course, lesso
 
 
 @pytest.mark.django_db
-def test_user_with_subscription_but_not_enrolled_cannot_open_lesson(auth_client_with_active_subscription, course):
+def test_user_with_subscription_but_not_enrolled_cannot_open_lesson(
+    auth_client_with_active_subscription, course
+):
     response = auth_client_with_active_subscription.get(f"/api/course/{course.id}/")
 
     assert response.status_code == 403
@@ -67,7 +69,9 @@ def test_student_without_subscription_cannot_complete_lesson(auth_client, lesson
     assert not StudentProgress.objects.filter(lesson=lesson, student=user).exists()
 
 
-def test_complete_lesson_twice_does_not_create_duplicate_progress(auth_client_with_active_subscription, lesson, user):
+def test_complete_lesson_twice_does_not_create_duplicate_progress(
+    auth_client_with_active_subscription, lesson, user
+):
     url = reverse("api:lesson_complete", args=[lesson.id])
 
     auth_client_with_active_subscription.post(url)

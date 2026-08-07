@@ -12,7 +12,9 @@ router.register(r"courses", views.CourseViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("course/<int:course_id>/lesson/<slug:slug>/", views.StudentLessonRetrieveAPIView.as_view()),
+    path(
+        "course/<int:course_id>/lesson/<slug:slug>/", views.StudentLessonRetrieveAPIView.as_view()
+    ),
     path("course/<int:course_id>/", views.StudentLessonRetrieveAPIView.as_view()),
     # Auth
     path("token/", jwt_views.TokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -24,9 +26,17 @@ urlpatterns = [
     path("users/me/", views.UserMeAPIView.as_view(), name="user-me"),
     path("subscriptions/", views.SubscriptionCreateAPIView.as_view(), name="subscription_create"),
     path("subscriptions/me/", views.SubscriptionRetrieveAPIVIew.as_view(), name="my-subscription"),
-    path("subscriptions/update/", views.SubscriptionUpdateAPIView.as_view(), name="subscription_update"),
+    path(
+        "subscriptions/update/",
+        views.SubscriptionUpdateAPIView.as_view(),
+        name="subscription_update",
+    ),
     path("plans/", views.PlanListAPIView.as_view(), name="plan_list"),
-    path("lesson/<int:lesson_id>/complete/", views.LessonCompleteAPIView.as_view(), name="lesson_complete"),
+    path(
+        "lesson/<int:lesson_id>/complete/",
+        views.LessonCompleteAPIView.as_view(),
+        name="lesson_complete",
+    ),
     # Swagger
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerView.as_view(url_name="api:schema"), name="swagger-ui"),

@@ -23,7 +23,14 @@ class UserAdmin(UserAdmin, ModelAdmin):
             _("Personal info"),
             {
                 "classes": ["tab"],
-                "fields": ("email", "password", "first_name", "last_name", "last_login", "date_joined"),
+                "fields": (
+                    "email",
+                    "password",
+                    "first_name",
+                    "last_name",
+                    "last_login",
+                    "date_joined",
+                ),
             },
         ),
         (

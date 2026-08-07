@@ -11,10 +11,18 @@ from api.permissions import HasActiveSubscription, IsEnrolled
 from courses.models import Course, Lesson
 from courses.serializers import CourseDetailSerializer, CourseListSerializer, LessonSerializer
 from subscriptions.models import Plan, Subscription
-from subscriptions.serializers import PlanSerializer, SubscriptionReadSerializer, SubscriptionWriteSerializer
+from subscriptions.serializers import (
+    PlanSerializer,
+    SubscriptionReadSerializer,
+    SubscriptionWriteSerializer,
+)
 from subscriptions.services.subscription import subscription_update
 from users.serializers import LessonCompleteSerializer, UserRegisterSerializer, UserUpdateSerializer
-from users.services.student_course import complete_lesson, get_first_uncompleted_lesson, get_lesson_by_slug
+from users.services.student_course import (
+    complete_lesson,
+    get_first_uncompleted_lesson,
+    get_lesson_by_slug,
+)
 
 
 class CourseViewSet(viewsets.ReadOnlyModelViewSet):
@@ -27,18 +35,29 @@ class CourseViewSet(viewsets.ReadOnlyModelViewSet):
         return CourseDetailSerializer
 
     @extend_schema(
-        request=None, summary="Enroll in course", description="Enrolls authenticated student in the selected course"
+        request=None,
+        summary="Enroll in course",
+        description="Enrolls authenticated student in the selected course",
     )
-    @action(methods=["post"], detail=True, permission_classes=[IsAuthenticated, HasActiveSubscription])
+    @action(
+        methods=["post"], detail=True, permission_classes=[IsAuthenticated, HasActiveSubscription]
+    )
     def enroll(self, request, *args, **kwargs):
         course = self.get_object()
         course.students.add(request.user)
         return Response({"course": course.title, "enroll": True}, status=status.HTTP_201_CREATED)
 
-    @extend_schema(summary="Get my courses", description="Returns courses where the authenticated user is enrolled")
-    @action(methods=["get"], detail=False, permission_classes=[IsAuthenticated, HasActiveSubscription])
+    @extend_schema(
+        summary="Get my courses",
+        description="Returns courses where the authenticated user is enrolled",
+    )
+    @action(
+        methods=["get"], detail=False, permission_classes=[IsAuthenticated, HasActiveSubscription]
+    )
     def my_courses(self, request):
-        serializer = self.get_serializer(Course.objects.filter(students=self.request.user), many=True)
+        serializer = self.get_serializer(
+            Course.objects.filter(students=self.request.user), many=True
+        )
         return Response({"student_courses": serializer.data}, status=status.HTTP_200_OK)
 
 

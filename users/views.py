@@ -11,7 +11,11 @@ from subscriptions.mixins import SubscriptionCheckMixin
 from users import forms as student_forms
 from users.forms import StudentProfileForm
 from users.models import StudentProgress
-from users.services.student_course import get_course_for_student, get_first_uncompleted_lesson, get_lesson_by_slug
+from users.services.student_course import (
+    get_course_for_student,
+    get_first_uncompleted_lesson,
+    get_lesson_by_slug,
+)
 
 
 class StudentEnrollCourseView(LoginRequiredMixin, SubscriptionCheckMixin, generic.FormView):
@@ -44,7 +48,10 @@ class StudentCourseListView(LoginRequiredMixin, SubscriptionCheckMixin, generic.
                 super()
                 .get_queryset()
                 .filter(students=self.request.user)
-                .annotate(count_modules=Count("modules", distinct=True), count_lessons=Count("modules__lessons"))
+                .annotate(
+                    count_modules=Count("modules", distinct=True),
+                    count_lessons=Count("modules__lessons"),
+                )
             )
             cache.set(key, courses, 300)
         return courses
@@ -89,7 +96,9 @@ class LessonCompleteView(LoginRequiredMixin, SubscriptionCheckMixin, View):
             cd = form.cleaned_data
             lesson = cd["lesson"]
 
-            StudentProgress.objects.get_or_create(student=request.user, lesson=lesson, defaults={"is_complete": True})
+            StudentProgress.objects.get_or_create(
+                student=request.user, lesson=lesson, defaults={"is_complete": True}
+            )
             next_lesson = lesson.get_next
             if next_lesson:
                 return redirect("students:student_course_lesson", cd["course"].id, next_lesson.slug)

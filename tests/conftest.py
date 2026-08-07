@@ -75,9 +75,13 @@ def another_course():
 
 @pytest.fixture
 def basic_plan():
-    return Plan.objects.create(name="Basic Plan", price=500, features="Test features", duration_days=30)
+    return Plan.objects.create(
+        name="Basic Plan", price=500, features="Test features", duration_days=30
+    )
 
 
 @pytest.fixture
 def pro_plan():
-    return Plan.objects.create(name="Professional Plan", price=3000, features="Test features", duration_days=365)
+    return Plan.objects.create(
+        name="Professional Plan", price=3000, features="Test features", duration_days=365
+    )

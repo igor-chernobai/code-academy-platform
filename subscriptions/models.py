@@ -36,7 +36,9 @@ class SubscriptionCommonInfo(models.Model):
 
 
 class Subscription(SubscriptionCommonInfo):
-    student = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, verbose_name="студент")
+    student = models.OneToOneField(
+        get_user_model(), on_delete=models.CASCADE, verbose_name="студент"
+    )
 
     class Meta:
         db_table = "subscriptions"

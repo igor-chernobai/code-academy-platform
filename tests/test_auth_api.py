@@ -21,7 +21,12 @@ def test_register_success(api_client):
 @pytest.mark.django_db
 def test_register_passwords_do_not_match(api_client):
     email, first_name, password = "authtestuser@gmail.com", "Test User", "test_user"
-    invalid_data = {"email": email, "first_name": first_name, "password": password, "password2": "invalidpassord"}
+    invalid_data = {
+        "email": email,
+        "first_name": first_name,
+        "password": password,
+        "password2": "invalidpassord",
+    }
     response = api_client.post("/api/auth/register/", invalid_data)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -30,7 +35,12 @@ def test_register_passwords_do_not_match(api_client):
 
 @pytest.mark.django_db
 def test_register_duplicate_email(api_client, user):
-    data = {"email": user.email, "first_name": "Test User", "password": "testuser", "password2": "testuser"}
+    data = {
+        "email": user.email,
+        "first_name": "Test User",
+        "password": "testuser",
+        "password2": "testuser",
+    }
     response = api_client.post("/api/auth/register/", data)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -41,7 +51,12 @@ def test_register_duplicate_email(api_client, user):
 @pytest.mark.django_db
 @pytest.mark.parametrize("field_name", ["email", "first_name", "password", "password2"])
 def test_register_missing_required_fields(api_client, field_name):
-    data = {"email": "test_user@gmail.com", "first_name": "Test User", "password": "testuser", "password2": "testuser"}
+    data = {
+        "email": "test_user@gmail.com",
+        "first_name": "Test User",
+        "password": "testuser",
+        "password2": "testuser",
+    }
     data.pop(field_name)
     response = api_client.post("/api/auth/register/", data)
 

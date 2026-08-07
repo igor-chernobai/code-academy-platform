@@ -19,7 +19,10 @@ class CourseListView(generic.ListView):
             courses = (
                 super()
                 .get_queryset()
-                .annotate(count_modules=Count("modules", distinct=True), count_lessons=Count("modules__lessons"))
+                .annotate(
+                    count_modules=Count("modules", distinct=True),
+                    count_lessons=Count("modules__lessons"),
+                )
             )
             cache.set("courses", courses, 300)
         return courses

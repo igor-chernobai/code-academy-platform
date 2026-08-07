@@ -32,7 +32,9 @@ def test_guest_cannot_create_subscription(api_client, basic_plan):
     assert Subscription.objects.count() == 0
 
 
-@pytest.mark.parametrize("plan_data", [({"plan": None}), ({}), ({"plan": "abc"}), ({"plan": ""}), ({"plan": 9999})])
+@pytest.mark.parametrize(
+    "plan_data", [({"plan": None}), ({}), ({"plan": "abc"}), ({"plan": ""}), ({"plan": 9999})]
+)
 @pytest.mark.django_db
 def test_subscription_create_with_invalid_plan_data(auth_client, plan_data):
     url = reverse("api:subscription_create")
@@ -94,7 +96,9 @@ def test_guest_cannot_update_subscription(api_client, pro_plan):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("invalid_data", [({"plan": 99999}), ({}), ({"student": 1, "plan": 123})])
-def test_student_cannot_update_with_incorrect_plan(auth_client_with_active_subscription, invalid_data):
+def test_student_cannot_update_with_incorrect_plan(
+    auth_client_with_active_subscription, invalid_data
+):
     url = reverse("api:subscription_update")
     response = auth_client_with_active_subscription.patch(url, invalid_data)
 

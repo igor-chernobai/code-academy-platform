@@ -18,7 +18,9 @@ def get_course_for_student(student: User, course_id: int) -> Course:
 
     course = cache.get(course_key)
     if course is None:
-        course = Course.objects.prefetch_related("modules__lessons").get(students=student, id=course_id)
+        course = Course.objects.prefetch_related("modules__lessons").get(
+            students=student, id=course_id
+        )
         cache.set(course_key, course, 600)
 
     return course
@@ -26,7 +28,9 @@ def get_course_for_student(student: User, course_id: int) -> Course:
 
 def get_lesson_by_slug(course_id: int, lesson_slug: str):
     lesson = get_object_or_404(
-        Lesson.objects.select_related("module__course"), slug=lesson_slug, module__course_id=course_id
+        Lesson.objects.select_related("module__course"),
+        slug=lesson_slug,
+        module__course_id=course_id,
     )
     return lesson
 
@@ -39,7 +43,9 @@ def get_first_uncompleted_lesson(student: User, course_id: int):
     )
 
     lessons = (
-        Lesson.objects.filter(module__course_id=course_id).exclude(id__in=lessons_id).order_by("module__order", "order")
+        Lesson.objects.filter(module__course_id=course_id)
+        .exclude(id__in=lessons_id)
+        .order_by("module__order", "order")
     )
 
     return lessons.first()
@@ -47,6 +53,8 @@ def get_first_uncompleted_lesson(student: User, course_id: int):
 
 def complete_lesson(student: User, lesson_id: int):
     lesson = get_object_or_404(Lesson, id=lesson_id)
-    obj, created = StudentProgress.objects.get_or_create(lesson=lesson, student=student, defaults={"is_complete": True})
+    obj, created = StudentProgress.objects.get_or_create(
+        lesson=lesson, student=student, defaults={"is_complete": True}
+    )
 
     return obj
