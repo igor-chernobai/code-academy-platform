@@ -8,7 +8,7 @@ from . import views
 app_name = "api"
 
 router = DefaultRouter()
-router.register(r"courses", views.CourseViewSet)
+router.register(r"courses", views.CourseViewSet, basename="courses")
 
 urlpatterns = [
     path("", include(router.urls)),

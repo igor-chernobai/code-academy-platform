@@ -1,22 +1,26 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status, viewsets
-from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import mixins
 
 from api.permissions import HasActiveSubscription, IsEnrolled
 from courses.models import Course, Lesson
-from courses.serializers import CourseDetailSerializer, CourseListSerializer, LessonSerializer
+from courses.serializers import CourseListSerializer, LessonSerializer
+from courses.services import CourseService
 from subscriptions.models import Plan, Subscription
 from subscriptions.serializers import (
     PlanSerializer,
     SubscriptionReadSerializer,
     SubscriptionWriteSerializer,
 )
-from subscriptions.services.subscription import subscription_update
+
+# from subscriptions.services.subscription import subscription_update
 from users.serializers import LessonCompleteSerializer, UserRegisterSerializer, UserUpdateSerializer
 from users.services.student_course import (
     complete_lesson,
@@ -25,40 +29,14 @@ from users.services.student_course import (
 )
 
 
-class CourseViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Course.objects.all()
+class CourseViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = CourseListSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    ordering_fields = ["created", "count_students"]
+    search_fields = ["title"]
 
-    def get_serializer_class(self):
-        if self.action == "list":
-            return CourseListSerializer
-
-        return CourseDetailSerializer
-
-    @extend_schema(
-        request=None,
-        summary="Enroll in course",
-        description="Enrolls authenticated student in the selected course",
-    )
-    @action(
-        methods=["post"], detail=True, permission_classes=[IsAuthenticated, HasActiveSubscription]
-    )
-    def enroll(self, request, *args, **kwargs):
-        course = self.get_object()
-        course.students.add(request.user)
-        return Response({"course": course.title, "enroll": True}, status=status.HTTP_201_CREATED)
-
-    @extend_schema(
-        summary="Get my courses",
-        description="Returns courses where the authenticated user is enrolled",
-    )
-    @action(
-        methods=["get"], detail=False, permission_classes=[IsAuthenticated, HasActiveSubscription]
-    )
-    def my_courses(self, request):
-        serializer = self.get_serializer(
-            Course.objects.filter(students=self.request.user), many=True
-        )
-        return Response({"student_courses": serializer.data}, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        return CourseService.get_courses_with_stats()
 
 
 class StudentLessonRetrieveAPIView(generics.RetrieveAPIView):
@@ -123,11 +101,11 @@ class SubscriptionUpdateAPIView(generics.UpdateAPIView):
         self.check_object_permissions(self.request, subscription)
         return subscription
 
-    def perform_update(self, serializer):
-        student = self.get_object().student
-        plan = serializer.validated_data["plan"]
+    # def perform_update(self, serializer):
+    #     student = self.get_object().student
+    #     plan = serializer.validated_data["plan"]
 
-        serializer.instance = subscription_update(student, plan)
+    # serializer.instance = subscription_update(student, plan)
 
 
 class LessonCompleteAPIView(APIView):

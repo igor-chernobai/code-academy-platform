@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from subscriptions.models import Plan, Subscription
-from subscriptions.services.subscription import subscription_create
+# from subscriptions.services.subscription import subscription_create
 
 
 class PlanSerializer(serializers.ModelSerializer):
@@ -21,13 +21,13 @@ class SubscriptionWriteSerializer(serializers.ModelSerializer):
         fields = ["id", "student", "plan_data", "plan", "start_date", "end_date", "is_active"]
         read_only_fields = ["start_date", "end_date"]
 
-    def create(self, validated_data):
-        student = validated_data["student"]
-        plan = validated_data["plan"]
-
-        subscription = subscription_create(student, plan)
-
-        return subscription
+    # def create(self, validated_data):
+    #     student = validated_data["student"]
+    #     plan = validated_data["plan"]
+    #
+    #     # subscription = subscription_create(student, plan)
+    #
+    #     return subscription
 
     def validate(self, data):
         if "plan" not in data:

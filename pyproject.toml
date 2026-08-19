@@ -1,6 +1,33 @@
+[project]
+name = "lms-academy"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "celery==5.6.3",
+    "django==5.2.0",
+    "django-debug-toolbar==6.1.0",
+    "django-filter==25.2",
+    "django-mdeditor==0.1.20",
+    "django-unfold==0.67.0",
+    "djangorestframework==3.16.1",
+    "djangorestframework-simplejwt==5.5.1",
+    "drf-spectacular>=0.30.0",
+    "gunicorn==25.1.0",
+    "markdown==3.10",
+    "pillow==12.0.0",
+    "psycopg2-binary>=2.9.12",
+    "pytest-cov==7.1.0",
+    "pytest-django==4.11.1",
+    "python-dotenv>=1.2.2",
+    "redis==8.0.0",
+    "ruff==0.15.17",
+]
+
 [tool.ruff]
 line-length = 100
-target-version = "py313"
+target-version = "py314"
 
 # Ignore dirs
 exclude = [
@@ -18,7 +45,6 @@ select = [
     "I",
     "UP",
     "B",
-    "DJ",
     "SIM",
 ]
 

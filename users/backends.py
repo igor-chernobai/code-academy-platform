@@ -12,7 +12,7 @@ class EmailAuthBackend(ModelBackend):
             user = UserModel.objects.get(email=username)
             if user.check_password(password):
                 return user
-        except (UserModel.DoesNotExist, UserModel.MultipleObjectsReturned):
+        except UserModel.DoesNotExist, UserModel.MultipleObjectsReturned:
             return None
 
     def get_user(self, user_id):
